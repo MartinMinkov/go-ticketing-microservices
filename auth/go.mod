@@ -1,9 +1,8 @@
-module auth.mminkov.net
+module github.com/MartinMinkov/go-ticketing-microservices/auth
 
 go 1.20
 
 require (
-	common.mminkov.net v1.0.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
@@ -11,8 +10,6 @@ require (
 	go.mongodb.org/mongo-driver v1.12.0
 	golang.org/x/crypto v0.11.0
 )
-
-replace common.mminkov.net => ../common
 
 require (
 	github.com/bytedance/sonic v1.9.2 // indirect

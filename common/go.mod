@@ -1,4 +1,4 @@
-module common.mminkov.net
+module github.com/MartinMinkov/go-ticketing-microservices/common
 
 go 1.20
 
