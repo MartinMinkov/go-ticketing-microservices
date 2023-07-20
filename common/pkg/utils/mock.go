@@ -1,38 +1,33 @@
 package utils
 
-import (
-	"net/http"
-
-	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
-)
-
-/*
-Generated from:
-auth-service-jwt
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODk4ODk2MTEsImlkIjoiNjRiOWFiNGJjZmVhNmI2MmMxZTIyMjlmIn0.5kE_BCrTi7TwVMAyAN8hL1t_SzMIcbyP6wYJdWd1sXo
-Path=/
-HttpOnly
-Expires=Fri, 21 Jul 2023 09:46:51 GMT
-
-	{
-			"email": "test@test.com",
-			"password": "password123"
-	}
-*/
-const User1JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODk4ODk2MTEsImlkIjoiNjRiOWFiNGJjZmVhNmI2MmMxZTIyMjlmIn0.5kE_BCrTi7TwVMAyAN8hL1t_SzMIcbyP6wYJdWd1sXo"
-const User2JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWF0IjoxNjg5ODg5NDQ5LCJpZCI6IjY0YjlhYWE5Y2ZlYTZiNjJjMWUyMjI5ZCJ9.iomMo7sgB-_EOjPAto7UhOTMjGFVO3iry8ND60zD75s"
-const User3JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNjg5ODg5NzAxLCJpZCI6IjY0YjlhYmE1Y2ZlYTZiNjJjMWUyMjJhMSJ9.IgByMJ6ybTt8nn81WHI2RI6SPvz_ivgbNJvialhKAIQ"
-
-func MockAuthenticatedCookie(jwt string) *http.Cookie {
-	return &http.Cookie{
-		Name:  auth.JWT_COOKIE_NAME,
-		Value: jwt,
-	}
+type UserMock struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	JWT       string `json:"jwt"`
 }
 
-func MockUnauthenticatedCookie() *http.Cookie {
-	return &http.Cookie{
-		Name:  auth.JWT_COOKIE_NAME,
-		Value: "",
-	}
+var UserMock1 = UserMock{
+	ID:        "64b9af66100af5c9c84eeb1e",
+	Email:     "test1@test.com",
+	CreatedAt: "2023-07-20T22:04:22.606443547Z",
+	UpdatedAt: "2023-07-20T22:04:22.606443587Z",
+	JWT:       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWF0IjoxNjg5ODkwNjYyLCJpZCI6IjY0YjlhZjY2MTAwYWY1YzljODRlZWIxZSJ9.cFifyvhanOWxFxnmi14xKCfcPjF3cDnG_uOyL8bOUVo",
+}
+
+var UserMock2 = UserMock{
+	ID:        "64b9b00a100af5c9c84eeb20",
+	Email:     "test2@test.com",
+	CreatedAt: "2023-07-20T22:07:06.698012567Z",
+	UpdatedAt: "2023-07-20T22:07:06.698012617Z",
+	JWT:       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNjg5ODkwODI2LCJpZCI6IjY0YjliMDBhMTAwYWY1YzljODRlZWIyMCJ9.xy5fWppuDwv6vphdEx4FX904MIYAEI0fJl7PGlHSxs8",
+}
+
+var UserMock3 = UserMock{
+	ID:        "64b9b042100af5c9c84eeb22",
+	Email:     "test3@test.com",
+	CreatedAt: "2023-07-20T22:08:02.703566481Z",
+	UpdatedAt: "2023-07-20T22:08:02.703566521Z",
+	JWT:       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QzQHRlc3QuY29tIiwiaWF0IjoxNjg5ODkwODgyLCJpZCI6IjY0YjliMDQyMTAwYWY1YzljODRlZWIyMiJ9.g_vVeR7FZKQG_GmMsGI604qOJ7Ii_wYHLJXQmVzBjoo",
 }
