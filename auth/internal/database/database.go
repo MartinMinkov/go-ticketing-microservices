@@ -1,0 +1,43 @@
+package database
+
+import (
+	"context"
+	"log"
+	"time"
+
+	"auth.mminkov.net/internal/config"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+type Database struct {
+	Client         *mongo.Client
+	UserCollection *mongo.Collection
+	Ctx            context.Context
+	CancelFunc     context.CancelFunc
+}
+
+func ConnectDB(config *config.Config) *Database {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var client *mongo.Client
+	var err error
+	if config.ApplicationConfig.Environment == "development" {
+		client, err = mongo.Connect(ctx, options.Client().ApplyURI(config.DatabaseConfig.GetConnectionStringWithUser()+"?authSource=admin"))
+	} else {
+		client, err = mongo.Connect(ctx, options.Client().ApplyURI(config.DatabaseConfig.GetConnectionString()))
+	}
+
+	if err != nil {
+		panic("Failed to connect to MongoDB")
+	}
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	usersCollection := client.Database(config.DatabaseConfig.Database).Collection("users")
+	return &Database{Client: client, UserCollection: usersCollection, Ctx: context.TODO()}
+}

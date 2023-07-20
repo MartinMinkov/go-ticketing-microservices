@@ -1,0 +1,15 @@
+version: "3.1"
+
+services:
+  mongo_auth:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: auth
+      ME_CONFIG_MONGODB_SERVER: mongo_auth
+    ports:
+      - 27017:27017
+    volumes:
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js

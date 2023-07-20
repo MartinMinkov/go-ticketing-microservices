@@ -1,0 +1,62 @@
+package routes
+
+import (
+	"net/http"
+
+	"auth.mminkov.net/internal/model"
+	"auth.mminkov.net/internal/state"
+	"auth.mminkov.net/internal/utils"
+	"auth.mminkov.net/internal/validator"
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
+)
+
+func SignIn(c *gin.Context, appState *state.AppState) {
+	var signinInput signInInput
+	if err := c.ShouldBindJSON(&signinInput); err != nil {
+		log.Err(err).Msg("Failed to bind JSON")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	validator.ValidateEmailPassword(c, signinInput)
+
+	existingUser, err := model.FindByEmail(appState.DB, signinInput.Email())
+	if err != nil || existingUser == nil {
+		log.Err(err).Msg("Failed to find user")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		return
+	}
+
+	passwordsMatch := existingUser.ComparePassword(signinInput.Password())
+	if !passwordsMatch {
+		log.Err(err).Msg("Invalid email or password")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		return
+	}
+
+	jwt, err := utils.CreateJWT(existingUser.ID.Hex(), *existingUser.Email)
+	if err != nil {
+		log.Err(err).Msg("Failed to create JWT")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	utils.SetCookieHandler(c, jwt)
+
+	c.JSON(http.StatusOK,
+		existingUser,
+	)
+}
+
+type signInInput struct {
+	EmailField    string `json:"email" validate:"required,email"`
+	PasswordField string `json:"password" validate:"required,min=4,max=20"`
+}
+
+func (s signInInput) Email() string {
+	return s.EmailField
+}
+
+func (s signInInput) Password() string {
+	return s.PasswordField
+}
