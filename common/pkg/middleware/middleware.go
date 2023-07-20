@@ -9,6 +9,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type UserClaims struct {
+	ID    string  `json:"id"`
+	Email string  `json:"email"`
+	Iat   float64 `json:"iat"`
+}
+
 func UserMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims, exists := c.Get("jwt")
@@ -25,12 +31,6 @@ func UserMiddleware() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired JWT"})
 			c.Abort()
 			return
-		}
-
-		type UserClaims struct {
-			ID    string  `json:"id"`
-			Email string  `json:"email"`
-			Iat   float64 `json:"iat"`
 		}
 
 		user := &UserClaims{
