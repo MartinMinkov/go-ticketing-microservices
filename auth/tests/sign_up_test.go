@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 )
 
 func TestSignUpIsSuccessful(t *testing.T) {
@@ -130,7 +130,7 @@ func TestSetsCookieAfterSignUp(t *testing.T) {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
 	}
 
-	_, err := utils.FindCookie(resp)
+	_, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatalf("Expected to find JWT cookie, got %v", err)
 	}

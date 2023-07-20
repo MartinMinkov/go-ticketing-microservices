@@ -1,5 +1,13 @@
 github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720051052-d30f0503cf04 h1:3+Gi9OxJqKplL12WHwPTeI7YBaA/w8OCJO1Bmc66Ie0=
 github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720051052-d30f0503cf04/go.mod h1:w5eB5p7gSS0Ulxm/8PilSX5D2WFIrB678zBm+dT7ZGI=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720051606-54e312d741a6 h1:rEu5PfnsdZ5F9kRoxdQsWVUG2YEA9ivPXbAKDHsbfYE=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720051606-54e312d741a6/go.mod h1:w5eB5p7gSS0Ulxm/8PilSX5D2WFIrB678zBm+dT7ZGI=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720052522-2bc3009a87bf h1:Mx8uO+WNvmvQnVwUFBS3vJJpHlOLEpBs/3bJrmHIWHI=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720052522-2bc3009a87bf/go.mod h1:w5eB5p7gSS0Ulxm/8PilSX5D2WFIrB678zBm+dT7ZGI=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720052816-8e757518cf0f h1:UZfTYv75GQVDO8bkMBJs9TQN014s6qbtJhB2KDGroQw=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720052816-8e757518cf0f/go.mod h1:w5eB5p7gSS0Ulxm/8PilSX5D2WFIrB678zBm+dT7ZGI=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720053635-ff306367bf91 h1:kPOth29J+LSuOQ34VOzGQd6YORWNpuW+sqKS7U4G9hE=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720053635-ff306367bf91/go.mod h1:w5eB5p7gSS0Ulxm/8PilSX5D2WFIrB678zBm+dT7ZGI=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.9.2 h1:GDaNjuWSGu09guE9Oql0MSTNhNCLlWwO8y/xM5BzcbM=
 github.com/bytedance/sonic v1.9.2/go.mod h1:i736AoUSYt75HyZLoJW9ERYxcy6eaN6h4BZXU064P/U=

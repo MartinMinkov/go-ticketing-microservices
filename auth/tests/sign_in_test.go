@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 )
 
 func TestSignInIsSuccessful(t *testing.T) {
@@ -22,7 +22,7 @@ func TestSignInIsSuccessful(t *testing.T) {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
 	}
 
-	cookie, err := utils.FindCookie(resp)
+	cookie, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func TestSignInWithWrongEmail(t *testing.T) {
 	resp := app.POST_sign_up(data)
 	defer resp.Body.Close()
 
-	cookie, err := utils.FindCookie(resp)
+	cookie, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -81,7 +81,7 @@ func TestSignInWithWrongPassword(t *testing.T) {
 	resp := app.POST_sign_up(data)
 	defer resp.Body.Close()
 
-	cookie, err := utils.FindCookie(resp)
+	cookie, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatal(err)
 	}

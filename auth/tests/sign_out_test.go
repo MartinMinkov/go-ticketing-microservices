@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 )
 
 func TestSignOutIsSuccessful(t *testing.T) {
@@ -22,7 +22,7 @@ func TestSignOutIsSuccessful(t *testing.T) {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
 	}
 
-	cookie, err := utils.FindCookie(resp)
+	cookie, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func TestSignOutIsSuccessful(t *testing.T) {
 		t.Fatalf("Expected status code %v, got %v", http.StatusOK, resp.StatusCode)
 	}
 
-	cookie, err = utils.FindCookie(resp)
+	cookie, err = auth.FindCookie(resp)
 	if err != nil || cookie.Value != "" {
 		t.Fatalf("Expected cookie to be cleared, got %v", cookie)
 	}

@@ -6,7 +6,9 @@ import (
 
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/database"
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -61,10 +63,26 @@ func (u *User) ComparePassword(expectedPassword string) bool {
 }
 
 func GetUserByContext(c *gin.Context) *User {
-	user, exists := c.Get("user")
+	userClaimsInterface, exists := c.Get("user")
 	if !exists {
 		return nil
 	}
+	userClaims, ok := userClaimsInterface.(*middleware.UserClaims)
+	if !ok {
+		log.Info().Msg("Failed to convert JWT from context")
+		return nil
+	}
 
-	return user.(*User)
+	objectId, err := primitive.ObjectIDFromHex(userClaims.ID)
+	if err != nil {
+		log.Err(err).Msg("Failed to convert user ID to ObjectID")
+		return nil
+	}
+
+	user := &User{
+		ID:    objectId,
+		Email: &userClaims.Email,
+	}
+
+	return user
 }

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 )
 
 func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
@@ -28,7 +28,7 @@ func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cookie, err := utils.FindCookie(resp)
+	cookie, err := auth.FindCookie(resp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +58,7 @@ func TestCurrentUserFailsWithBadCookie(t *testing.T) {
 	defer app.Cleanup()
 
 	cookie := &http.Cookie{
-		Name:  utils.JWT_COOKIE_NAME,
+		Name:  auth.JWT_COOKIE_NAME,
 		Value: "bad",
 	}
 

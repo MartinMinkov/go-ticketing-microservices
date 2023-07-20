@@ -3,11 +3,11 @@ package routes
 import (
 	"net/http"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/gin-gonic/gin"
 )
 
 func SignOut(c *gin.Context) {
-	utils.DeleteCookieHandler(c)
+	auth.DeleteCookieHandler(c)
 	c.JSON(http.StatusOK, nil)
 }

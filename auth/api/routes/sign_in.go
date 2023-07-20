@@ -5,8 +5,8 @@ import (
 
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/model"
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
-	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/validator"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )
@@ -35,13 +35,13 @@ func SignIn(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	jwt, err := utils.CreateJWT(existingUser.ID.Hex(), *existingUser.Email)
+	jwt, err := auth.CreateJWT(existingUser.ID.Hex(), *existingUser.Email)
 	if err != nil {
 		log.Err(err).Msg("Failed to create JWT")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	utils.SetCookieHandler(c, jwt)
+	auth.SetCookieHandler(c, jwt)
 
 	c.JSON(http.StatusOK,
 		existingUser,

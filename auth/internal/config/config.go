@@ -110,10 +110,10 @@ func (config *ApplicationConfig) IsProduction() bool {
 	return config.Environment == "production"
 }
 
-func GetJWTSecret() ([]byte, error) {
+func GetJWTSecret() (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		return nil, nil
+		return "", nil
 	}
-	return []byte(secret), nil
+	return secret, nil
 }

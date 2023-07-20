@@ -8,22 +8,29 @@ import (
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/config"
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/database"
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
-func BuildServer(config *config.Config, appState *state.AppState) *http.Server {
+func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 	InitLogger()
 	r := initGin(appState)
 
-	if config.ApplicationConfig.IsProduction() {
+	if cfg.ApplicationConfig.IsProduction() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	jwtSecret, err := config.GetJWTSecret()
+	if err != nil {
+		log.Err(err).Msg("Failed to get JWT secret")
+	}
+	auth.SetSecret(jwtSecret)
+
 	return &http.Server{
-		Addr:    ":" + config.ApplicationConfig.Port,
+		Addr:    ":" + cfg.ApplicationConfig.Port,
 		Handler: r,
 	}
 }

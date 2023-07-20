@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720051052-d30f0503cf04 // indirect
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720053635-ff306367bf91 // indirect
 	github.com/bytedance/sonic v1.9.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
