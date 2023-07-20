@@ -28,15 +28,15 @@ func UserMiddleware() gin.HandlerFunc {
 		}
 
 		type UserClaims struct {
-			ID    string `json:"id"`
-			Email string `json:"email"`
-			Iat   int64  `json:"iat"`
+			ID    string  `json:"id"`
+			Email string  `json:"email"`
+			Iat   float64 `json:"iat"`
 		}
 
 		user := &UserClaims{
 			ID:    jwtToken.Claims.(jwt.MapClaims)["id"].(string),
 			Email: jwtToken.Claims.(jwt.MapClaims)["email"].(string),
-			Iat:   jwtToken.Claims.(jwt.MapClaims)["iat"].(int64),
+			Iat:   jwtToken.Claims.(jwt.MapClaims)["iat"].(float64),
 		}
 
 		c.Set("user", user)
