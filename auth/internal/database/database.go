@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"auth.mminkov.net/internal/config"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

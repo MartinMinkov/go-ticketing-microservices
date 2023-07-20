@@ -1,6 +1,6 @@
 package state
 
-import "auth.mminkov.net/internal/database"
+import "github.com/MartinMinkov/go-ticketing-microservices/auth/internal/database"
 
 type AppState struct {
 	DB        *database.Database

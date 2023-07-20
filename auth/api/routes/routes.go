@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"auth.mminkov.net/internal/state"
-	"common.mminkov.net/pkg/middleware"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 

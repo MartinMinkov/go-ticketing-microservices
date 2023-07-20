@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"auth.mminkov.net/internal/config"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/config"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )

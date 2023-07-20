@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"common.mminkov.net/pkg/auth"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/rs/zerolog/log"

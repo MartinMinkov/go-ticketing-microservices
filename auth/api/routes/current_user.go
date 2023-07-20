@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"auth.mminkov.net/internal/model"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/model"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"auth.mminkov.net/internal/state"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
 	"github.com/gin-gonic/gin"
 )
 

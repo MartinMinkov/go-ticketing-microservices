@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"auth.mminkov.net/internal/database"
-	"auth.mminkov.net/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/database"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

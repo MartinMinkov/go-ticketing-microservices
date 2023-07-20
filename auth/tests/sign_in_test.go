@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"auth.mminkov.net/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
 )
 
 func TestSignInIsSuccessful(t *testing.T) {

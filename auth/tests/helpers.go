@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"auth.mminkov.net/api"
-	"auth.mminkov.net/internal/config"
-	"auth.mminkov.net/internal/state"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/api"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/config"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
 	"github.com/gin-gonic/gin"
 )
 

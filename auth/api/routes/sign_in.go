@@ -3,10 +3,10 @@ package routes
 import (
 	"net/http"
 
-	"auth.mminkov.net/internal/model"
-	"auth.mminkov.net/internal/state"
-	"auth.mminkov.net/internal/utils"
-	"auth.mminkov.net/internal/validator"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/model"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/state"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/utils"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )

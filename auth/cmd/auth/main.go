@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"time"
 
-	"auth.mminkov.net/api"
-	"auth.mminkov.net/internal/config"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/api"
+	"github.com/MartinMinkov/go-ticketing-microservices/auth/internal/config"
 )
 
 func main() {
