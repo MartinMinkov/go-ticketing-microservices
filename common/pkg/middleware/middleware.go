@@ -67,3 +67,17 @@ func JWTMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func GetUserClaimsByContext(c *gin.Context) *UserClaims {
+	userClaimsInterface, exists := c.Get("user")
+	if !exists {
+		return nil
+	}
+	userClaims, ok := userClaimsInterface.(*UserClaims)
+	if !ok {
+		log.Info().Msg("Failed to convert JWT from context")
+		return nil
+	}
+
+	return userClaims
+}
