@@ -8,10 +8,10 @@ import (
 
 const JWT_COOKIE_NAME = "auth-service-jwt"
 
-var JWT_SECRET = ""
+var JWT_SECRET = []byte("")
 
 func SetSecret(secret string) {
-	JWT_SECRET = secret
+	JWT_SECRET = []byte(secret)
 }
 
 func CreateJWT(userId string, email string, secret string) (string, error) {
