@@ -14,7 +14,7 @@ func SetSecret(secret string) {
 	JWT_SECRET = []byte(secret)
 }
 
-func CreateJWT(userId string, email string, secret string) (string, error) {
+func CreateJWT(userId string, email string) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    userId,
 		"email": email,
