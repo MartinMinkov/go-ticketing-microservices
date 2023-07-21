@@ -16,7 +16,7 @@ func TestSignUpIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -32,7 +32,7 @@ func TestMultipleSignUpIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -43,7 +43,7 @@ func TestMultipleSignUpIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp = app.POST_sign_up(data)
+	resp = app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -54,7 +54,7 @@ func TestMultipleSignUpIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp = app.POST_sign_up(data)
+	resp = app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -70,7 +70,7 @@ func TestSignUpFailsWithInvalidEmail(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("Expected status code %v, got %v", http.StatusBadRequest, resp.StatusCode)
@@ -86,7 +86,7 @@ func TestSignUpFailsWithInvalidPassword(t *testing.T) {
 		"password": "",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("Expected status code %v, got %v", http.StatusBadRequest, resp.StatusCode)
@@ -102,13 +102,13 @@ func TestSignUpFailsWithDuplicateSignUp(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
 	}
 
-	resp = app.POST_sign_up(data)
+	resp = app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("Expected status code %v, got %v", http.StatusBadRequest, resp.StatusCode)
@@ -124,7 +124,7 @@ func TestSetsCookieAfterSignUp(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)

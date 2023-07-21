@@ -27,7 +27,7 @@ func Routes(appState *state.AppState) func(router *gin.Engine) {
 
 			authorized.GET("/currentuser", CurrentUser)
 
-			router.POST("/api/users/signout", SignOut)
+			authorized.POST("/signout", SignOut)
 		}
 	}
 }

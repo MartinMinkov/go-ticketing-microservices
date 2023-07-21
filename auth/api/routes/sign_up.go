@@ -20,7 +20,11 @@ func SignUp(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	validator.ValidateEmailPassword(c, signupInput)
+	err := validator.ValidateEmailPassword(c, signupInput)
+	if err != nil {
+		log.Err(err).Msg("Failed to validate email and password")
+		return
+	}
 
 	existingUser, err := model.FindByEmail(appState.DB, signupInput.Email())
 	if err != nil {

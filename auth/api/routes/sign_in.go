@@ -19,7 +19,11 @@ func SignIn(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	validator.ValidateEmailPassword(c, signinInput)
+	err := validator.ValidateEmailPassword(c, signinInput)
+	if err != nil {
+		log.Err(err).Msg("Failed to validate email and password")
+		return
+	}
 
 	existingUser, err := model.FindByEmail(appState.DB, signinInput.Email())
 	if err != nil || existingUser == nil {

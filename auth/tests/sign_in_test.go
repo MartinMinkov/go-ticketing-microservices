@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/utils"
 )
 
 func TestSignInIsSuccessful(t *testing.T) {
@@ -16,7 +17,7 @@ func TestSignInIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -27,14 +28,14 @@ func TestSignInIsSuccessful(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resp = app.POST_sign_in(data, cookie)
+	resp = app.PostSignIn(data, cookie)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("Expected status code %v, got %v", http.StatusOK, resp.StatusCode)
 	}
 
 	var body map[string]interface{}
-	if err := ReadJSON(resp, &body); err != nil {
+	if err := utils.ReadJSON(resp, &body); err != nil {
 		t.Fatal(err)
 	}
 
@@ -52,7 +53,7 @@ func TestSignInWithWrongEmail(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 
 	cookie, err := auth.FindCookie(resp)
@@ -61,7 +62,7 @@ func TestSignInWithWrongEmail(t *testing.T) {
 	}
 
 	data["email"] = "test1@gmail.com"
-	resp = app.POST_sign_in(data, cookie)
+	resp = app.PostSignIn(data, cookie)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusUnauthorized {
@@ -78,7 +79,7 @@ func TestSignInWithWrongPassword(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 
 	cookie, err := auth.FindCookie(resp)
@@ -87,7 +88,7 @@ func TestSignInWithWrongPassword(t *testing.T) {
 	}
 
 	data["password"] = "wrong"
-	resp = app.POST_sign_in(data, cookie)
+	resp = app.PostSignIn(data, cookie)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusUnauthorized {

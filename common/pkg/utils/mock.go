@@ -1,5 +1,11 @@
 package utils
 
+import (
+	"net/http"
+
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
+)
+
 type UserMock struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
@@ -30,4 +36,13 @@ var UserMock3 = UserMock{
 	CreatedAt: "2023-07-20T22:08:02.703566481Z",
 	UpdatedAt: "2023-07-20T22:08:02.703566521Z",
 	JWT:       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QzQHRlc3QuY29tIiwiaWF0IjoxNjg5ODkwODgyLCJpZCI6IjY0YjliMDQyMTAwYWY1YzljODRlZWIyMiJ9.g_vVeR7FZKQG_GmMsGI604qOJ7Ii_wYHLJXQmVzBjoo",
+}
+
+func SetUserCookieOnRequest(req *http.Request, user *UserMock) {
+	cookie := &http.Cookie{
+		Name:  auth.JWT_COOKIE_NAME,
+		Value: user.JWT,
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.AddCookie(cookie)
 }

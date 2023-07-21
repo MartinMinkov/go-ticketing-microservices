@@ -63,15 +63,7 @@ func (u *User) ComparePassword(expectedPassword string) bool {
 }
 
 func GetUserByContext(c *gin.Context) *User {
-	userClaimsInterface, exists := c.Get("user")
-	if !exists {
-		return nil
-	}
-	userClaims, ok := userClaimsInterface.(*middleware.UserClaims)
-	if !ok {
-		log.Info().Msg("Failed to convert JWT from context")
-		return nil
-	}
+	userClaims := middleware.GetUserClaimsByContext(c)
 
 	objectId, err := primitive.ObjectIDFromHex(userClaims.ID)
 	if err != nil {

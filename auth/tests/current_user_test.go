@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/utils"
 )
 
 func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
@@ -16,7 +17,7 @@ func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
@@ -24,7 +25,7 @@ func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
 	}
 
 	var body map[string]interface{}
-	if err := ReadJSON(resp, &body); err != nil {
+	if err := utils.ReadJSON(resp, &body); err != nil {
 		t.Fatal(err)
 	}
 
@@ -33,14 +34,14 @@ func TestCurrentUserRespondsWithCorrectDetails(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resp = app.GET_currentuser(cookie)
+	resp = app.GetCurrentUser(cookie)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("Expected status code %v, got %v", http.StatusOK, resp.StatusCode)
 	}
 
-	if err := ReadJSON(resp, &body); err != nil {
+	if err := utils.ReadJSON(resp, &body); err != nil {
 		t.Fatal(err)
 	}
 
@@ -62,7 +63,7 @@ func TestCurrentUserFailsWithBadCookie(t *testing.T) {
 		Value: "bad",
 	}
 
-	resp := app.GET_currentuser(cookie)
+	resp := app.GetCurrentUser(cookie)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusUnauthorized {

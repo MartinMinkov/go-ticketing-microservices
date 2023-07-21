@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      labels:
+        app: tickets
+    spec:
+      containers:
+      - name: tickets
+        image: mminkov/tickets
+        imagePullPolicy: Never
+        env:
+          - name: MONGO_HOST 
+            value: "tickets-mongo-srv"
+          - name: MONGO_PORT
+            value: "27017"
+          - name: MONGO_DB_NAME
+            value: "tickets"
+          - name: ENVIRONMENT
+            value: "production"
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 8080
+      targetPort: 8080

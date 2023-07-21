@@ -4,13 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
-	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/auth/api"
@@ -25,7 +21,7 @@ type TestApp struct {
 	Server   *http.Server
 }
 
-func (t *TestApp) GET_healthcheck() *http.Response {
+func (t *TestApp) GetHealthCheck() *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
 	resp, err := http.Get(addr + "/api/users/healthcheck")
 	if err != nil {
@@ -34,7 +30,7 @@ func (t *TestApp) GET_healthcheck() *http.Response {
 	return resp
 }
 
-func (t *TestApp) GET_currentuser(cookie *http.Cookie) *http.Response {
+func (t *TestApp) GetCurrentUser(cookie *http.Cookie) *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
 	req, err := http.NewRequest(http.MethodGet, addr+"/api/users/currentuser", nil)
 	if err != nil {
@@ -52,7 +48,7 @@ func (t *TestApp) GET_currentuser(cookie *http.Cookie) *http.Response {
 	return resp
 }
 
-func (t *TestApp) POST_sign_up(data map[string]interface{}) *http.Response {
+func (t *TestApp) PostSignUp(data map[string]interface{}) *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -65,7 +61,7 @@ func (t *TestApp) POST_sign_up(data map[string]interface{}) *http.Response {
 	return resp
 }
 
-func (t *TestApp) POST_sign_in(data map[string]interface{}, cookie *http.Cookie) *http.Response {
+func (t *TestApp) PostSignIn(data map[string]interface{}, cookie *http.Cookie) *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -87,7 +83,7 @@ func (t *TestApp) POST_sign_in(data map[string]interface{}, cookie *http.Cookie)
 	return resp
 }
 
-func (t *TestApp) POST_sign_out(cookie *http.Cookie) *http.Response {
+func (t *TestApp) PostSignOut(cookie *http.Cookie) *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
 	req, err := http.NewRequest(http.MethodPost, addr+"/api/users/signout", nil)
 	if err != nil {
@@ -144,50 +140,4 @@ func (app *TestApp) Cleanup() {
 	if err := app.Server.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown: ", err)
 	}
-}
-
-func ReadJSON(r *http.Response, dst any) error {
-	dec := json.NewDecoder(r.Body)
-	dec.DisallowUnknownFields()
-
-	err := dec.Decode(dst)
-	if err != nil {
-		var syntaxError *json.SyntaxError
-		var unmarshalTypeError *json.UnmarshalTypeError
-		var invalidUnmarshalError *json.InvalidUnmarshalError
-
-		switch {
-		case errors.As(err, &syntaxError):
-			return errors.New("body contains badly-formed JSON (at character " + strconv.Itoa(int(syntaxError.Offset)) + ")")
-
-		case errors.Is(err, io.ErrUnexpectedEOF):
-			return errors.New("body contains badly-formed JSON")
-
-		case errors.As(err, &unmarshalTypeError):
-			if unmarshalTypeError.Field != "" {
-				return errors.New("body contains incorrect JSON type for field " + unmarshalTypeError.Field)
-			}
-			return errors.New("body contains incorrect JSON type (at character " + strconv.Itoa(int(unmarshalTypeError.Offset)) + ")")
-
-		case errors.Is(err, io.EOF):
-			return errors.New("body must not be empty")
-
-		case strings.HasPrefix(err.Error(), "json: unknown field "):
-			fieldName := strings.TrimPrefix(err.Error(), "json: unknown field ")
-			return fmt.Errorf("body contains unknown key %s", fieldName)
-
-		case errors.As(err, &invalidUnmarshalError):
-			panic(err)
-
-		default:
-			return errors.New("body contains unknown JSON error")
-
-		}
-	}
-
-	err = dec.Decode(&struct{}{})
-	if err != io.EOF {
-		return errors.New("body must only contain a single JSON value")
-	}
-	return nil
 }

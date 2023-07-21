@@ -16,7 +16,7 @@ func TestSignOutIsSuccessful(t *testing.T) {
 		"password": "pass",
 	}
 
-	resp := app.POST_sign_up(data)
+	resp := app.PostSignUp(data)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
 		t.Fatalf("Expected status code %v, got %v", http.StatusCreated, resp.StatusCode)
@@ -27,7 +27,7 @@ func TestSignOutIsSuccessful(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	resp = app.POST_sign_out(cookie)
+	resp = app.PostSignOut(cookie)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("Expected status code %v, got %v", http.StatusOK, resp.StatusCode)

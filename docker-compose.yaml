@@ -13,3 +13,15 @@ services:
       - 27017:27017
     volumes:
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+  mongo_tickets:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: tickets
+      ME_CONFIG_MONGODB_SERVER: mongo_tickets
+    ports:
+      - 27018:27017
+    volumes:
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
