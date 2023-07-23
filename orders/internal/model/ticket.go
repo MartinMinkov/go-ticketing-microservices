@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/database"
+	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/database"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,8 +13,7 @@ import (
 
 type Ticket struct {
 	ID      primitive.ObjectID `bson:"_id" json:"id"`
-	UserId  string             `bson:"user_id" json:"user_id" validate:"required"`
-	Title   string             `bson:"title" json:"title" validate:"required"`
+	Title   string             `bson:"title" json:"title"`
 	Price   int64              `bson:"price" json:"price"`
 	Version int64              `bson:"version" json:"version"`
 }
@@ -23,7 +22,6 @@ func NewTicket(userId string, title string, price int64) *Ticket {
 	defaultVersion := int64(0)
 	return &Ticket{
 		ID:      primitive.NewObjectID(),
-		UserId:  userId,
 		Title:   title,
 		Price:   price,
 		Version: defaultVersion,
@@ -54,20 +52,11 @@ func GetAllTickets(db *database.Database, userId string) ([]*Ticket, error) {
 
 func GetSingleTicket(db *database.Database, id string) (*Ticket, error) {
 	var ticket Ticket
-	objectId, err := primitive.ObjectIDFromHex(id)
+	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return nil, errors.New("failed to convert ticket ID to ObjectID: " + err.Error())
+		return nil, errors.New("failed to convert id: " + err.Error())
 	}
-	err = db.TicketCollection.FindOne(db.Ctx, bson.D{{Key: "_id", Value: objectId}}).Decode(&ticket)
-	if err != nil {
-		return nil, errors.New("failed to get ticket: " + err.Error())
-	}
-	return &ticket, nil
-}
-
-func GetSingleTicketByTitle(db *database.Database, title string) (*Ticket, error) {
-	var ticket Ticket
-	err := db.TicketCollection.FindOne(db.Ctx, bson.D{{Key: "title", Value: title}}).Decode(&ticket)
+	err = db.TicketCollection.FindOne(db.Ctx, bson.D{{Key: "_id", Value: objID}}).Decode(&ticket)
 	if err != nil {
 		return nil, errors.New("failed to get ticket: " + err.Error())
 	}

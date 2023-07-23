@@ -3,6 +3,8 @@
 set -x
 set -eo pipefail
 
+kubectl delete deployments --all
+
 kubectl delete all --all -n ingress-nginx
 
 kubectl delete clusterrolebinding ingress-nginx

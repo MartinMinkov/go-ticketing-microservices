@@ -40,14 +40,14 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	if *currentTicket.UserId != userClaims.ID {
+	if currentTicket.UserId != userClaims.ID {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not authorized to update ticket"})
 		return
 	}
 
-	currentTicket.Title = &updateticketInput.TitleField
-	currentTicket.Price = &updateticketInput.PriceField
-	currentTicket.Version = &updateticketInput.VersionField
+	currentTicket.Title = updateticketInput.TitleField
+	currentTicket.Price = updateticketInput.PriceField
+	currentTicket.Version = updateticketInput.VersionField
 
 	err = currentTicket.Update(appState.DB)
 	if err != nil {
@@ -56,7 +56,7 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 	}
 
 	publisher := events.NewPublisher(appState.NatsConn, events.TicketUpdated, context.TODO())
-	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), *currentTicket.UserId, *currentTicket.Title, *currentTicket.Price))
+	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), currentTicket.UserId, currentTicket.Title, currentTicket.Price))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish ticket update event")
 	}

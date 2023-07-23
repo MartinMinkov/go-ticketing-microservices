@@ -148,8 +148,8 @@ func TestUpdateTicketIncrementsVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if *updatedTicket.Version != (*ticket.Version)+1 {
-		t.Errorf("expected version %d, got %d", (*ticket.Version)+1, updatedTicket.Version)
+	if updatedTicket.Version != ticket.Version+1 {
+		t.Errorf("expected version %d, got %d", ticket.Version+1, updatedTicket.Version)
 	}
 }
 

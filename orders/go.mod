@@ -1,4 +1,4 @@
-module github.com/MartinMinkov/go-ticketing-microservices/tickets
+module github.com/MartinMinkov/go-ticketing-microservices/orders
 
 go 1.20
 

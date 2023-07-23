@@ -25,6 +25,14 @@ build:
         manual:
           - src: 'tickets/**/*.go'
             dest: .
+    - image: mminkov/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'orders/**/*.go'
+            dest: .
     - image: mminkov/client
       context: client
       docker:
