@@ -3,16 +3,15 @@ module github.com/MartinMinkov/go-ticketing-microservices/auth
 go 1.20
 
 require (
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720221730-12b1893360c3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.1
-	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/rs/zerolog v1.29.1
 	go.mongodb.org/mongo-driver v1.12.0
 	golang.org/x/crypto v0.11.0
 )
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720221730-12b1893360c3 // indirect
 	github.com/bytedance/sonic v1.9.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
@@ -20,6 +19,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
