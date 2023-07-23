@@ -122,13 +122,16 @@ func (t *TestApp) DeleteTicket(ticketId string, user *utils.UserMock) *http.Resp
 
 func SpawnApp() *TestApp {
 	applicationConfig := config.BuildApplicationConfig()
+	natsConfig := config.BuildNatsConfig()
 	databaseConfig := config.BuildDatabaseConfig()
+
 	databaseConfig.Database = "tickets_test_" + strconv.FormatInt(time.Now().UnixNano(), 10)
 	databaseConfig.Port = 27018 // When using docker compose, increment the expected port by 1
 
 	config := &config.Config{
 		ApplicationConfig: applicationConfig,
 		DatabaseConfig:    databaseConfig,
+		NatsConfig:        natsConfig,
 	}
 
 	appState := api.BuildAppState(config)
@@ -144,7 +147,7 @@ func SpawnApp() *TestApp {
 	}()
 
 	// Wait a bit for the server to start
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 
 	return &TestApp{
 		Config:   config,
