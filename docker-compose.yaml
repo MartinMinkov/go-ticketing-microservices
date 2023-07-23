@@ -25,3 +25,25 @@ services:
       - 27018:27017
     volumes:
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+  nats:
+    container_name: nats
+    image: nats-streaming:latest
+    command:
+      - "-p"
+      - "4222"
+      - "-m"
+      - "8222"
+      - "-hbi"
+      - "5s"
+      - "-hbt"
+      - "5s"
+      - "-hbf"
+      - "2"
+      - "-SD"
+      - "-DV"
+      - "-cid"
+      - "ticketing"
+      - "-js"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
