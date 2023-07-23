@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/api/routes"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/config"
@@ -42,12 +44,19 @@ func InitLogger() {
 
 func BuildAppState(config *config.Config) *state.AppState {
 	db := database.ConnectDB(config)
+
+	nc, err := events.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*15)
+	if err != nil {
+		panic("Failed to connect to NATS")
+	}
+
 	cleanup := func() {
 		if err := db.Client.Disconnect(db.Ctx); err != nil {
 			panic("Failed to disconnect from MongoDB")
 		}
 	}
-	return &state.AppState{DB: db, DBCleanup: cleanup}
+
+	return &state.AppState{DB: db, DBCleanup: cleanup, NatsConn: nc, NatsCleanup: func() { nc.Close() }}
 }
 
 func initGin(appState *state.AppState) *gin.Engine {

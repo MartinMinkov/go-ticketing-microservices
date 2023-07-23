@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/model"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/state"
@@ -34,6 +36,12 @@ func CreateTicket(c *gin.Context, appState *state.AppState) {
 
 	ticket := model.NewTicket(userClaims.ID, createticketInput.Title(), createticketInput.Price())
 	ticket.Save(appState.DB)
+
+	publisher := events.NewPublisher(appState.NatsConn, events.TicketCreated, context.TODO())
+	err = publisher.Publish(events.NewTicketCreatedEvent(ticket.ID.Hex(), *ticket.UserId, *ticket.Title, *ticket.Price))
+	if err != nil {
+		log.Err(err).Msg("Failed to publish ticket created event")
+	}
 
 	c.JSON(http.StatusCreated, ticket)
 }

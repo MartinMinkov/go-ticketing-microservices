@@ -8,6 +8,7 @@ import (
 type Config struct {
 	ApplicationConfig *ApplicationConfig
 	DatabaseConfig    *DatabaseConfig
+	NatsConfig        *NatsConfig
 }
 
 type ApplicationConfig struct {
@@ -22,6 +23,11 @@ type DatabaseConfig struct {
 	Username string
 	Password string
 	Database string
+}
+
+type NatsConfig struct {
+	Host string
+	Port int
 }
 
 func BuildApplicationConfig() *ApplicationConfig {
@@ -82,6 +88,23 @@ func BuildDatabaseConfig() *DatabaseConfig {
 	}
 }
 
+func BuildNatsConfig() *NatsConfig {
+	port, err := strconv.Atoi(os.Getenv("NATS_PORT"))
+	if err != nil {
+		port = 4222
+	}
+
+	host := os.Getenv("NATS_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	return &NatsConfig{
+		Host: host,
+		Port: port,
+	}
+}
+
 func BuildConfig() *Config {
 	var config Config
 	applicationConfig := BuildApplicationConfig()
@@ -89,6 +112,9 @@ func BuildConfig() *Config {
 
 	databaseConfig := BuildDatabaseConfig()
 	config.DatabaseConfig = databaseConfig
+
+	natsConfig := BuildNatsConfig()
+	config.NatsConfig = natsConfig
 
 	return &config
 }
@@ -100,6 +126,10 @@ func (dbConfig *DatabaseConfig) GetConnectionString() string {
 func (dbConfig *DatabaseConfig) GetConnectionStringWithUser() string {
 	return "mongodb://" + dbConfig.Username + ":" + dbConfig.Password + "@" +
 		dbConfig.Host + ":" + strconv.Itoa(dbConfig.Port) + "/" + dbConfig.Database
+}
+
+func (natsConfig *NatsConfig) GetAddress() string {
+	return natsConfig.Host + ":" + strconv.Itoa(natsConfig.Port)
 }
 
 func (config *ApplicationConfig) GetAddress() string {
