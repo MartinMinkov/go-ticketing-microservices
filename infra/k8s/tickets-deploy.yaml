@@ -23,6 +23,10 @@ spec:
             value: "27017"
           - name: MONGO_DB_NAME
             value: "tickets"
+          - name: NATS_HOST
+            value: "nats-srv"
+          - name: NATS_PORT
+            value: "4222"
           - name: ENVIRONMENT
             value: "production"
           - name: JWT_KEY
