@@ -62,7 +62,7 @@ func BuildAppState(config *config.Config) *state.AppState {
 
 func initGin(appState *state.AppState) *gin.Engine {
 	r := gin.New()
-	r.Use(middleware.Logger("tickets"))
+	r.Use(middleware.Logger("orders"))
 	setupRoutes := routes.Routes(appState)
 	setupRoutes(r)
 
