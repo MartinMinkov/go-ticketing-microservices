@@ -8,12 +8,23 @@ import (
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/model"
 )
 
-func TestGetAllTicketIsSuccessful(t *testing.T) {
+func TestGetAllOrdersIsSuccessful(t *testing.T) {
 	app := SpawnApp()
 	defer app.Cleanup()
 
+	data := map[string]interface{}{
+		"ticket_id": app.Mocks.TicketIds[0],
+	}
+
 	user := utils.UserMock1
-	resp := app.GetOrders(&user)
+	resp := app.PostCreateOrder(data, &user)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated {
+		t.Errorf("expected status code %d, got %d", http.StatusCreated, resp.StatusCode)
+	}
+
+	resp = app.GetOrders(&user)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {

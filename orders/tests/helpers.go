@@ -90,9 +90,9 @@ func (t *TestApp) PostCreateOrder(data map[string]interface{}, user *utils.UserM
 	return resp
 }
 
-func (t *TestApp) DeleteOrder(ticketId string, user *utils.UserMock) *http.Response {
+func (t *TestApp) DeleteOrder(orderId string, user *utils.UserMock) *http.Response {
 	addr := t.Config.ApplicationConfig.GetAddress()
-	req, err := http.NewRequest(http.MethodDelete, addr+"/api/orders/"+ticketId, nil)
+	req, err := http.NewRequest(http.MethodDelete, addr+"/api/orders/"+orderId, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}

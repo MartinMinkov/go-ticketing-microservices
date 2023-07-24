@@ -116,7 +116,7 @@ func CancelOrder(db *database.Database, id string) error {
 	if err != nil {
 		return errors.New("failed to order ticket ID to ObjectID: " + err.Error())
 	}
-	filter := bson.M{"_id": objectId, "status": OrderCancelled}
+	filter := bson.M{"_id": objectId}
 	update := bson.M{
 		"$set": bson.M{
 			"status": OrderCancelled,
@@ -128,7 +128,7 @@ func CancelOrder(db *database.Database, id string) error {
 	err = db.OrderCollection.FindOneAndUpdate(context.Background(), filter, update, opts).Decode(&updatedOrder)
 
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return errors.New("order not found")
 		}
 		return errors.New("failed to update order: " + err.Error())
@@ -148,15 +148,14 @@ func GetOrderByTicketId(db *database.Database, ticketId string) (*Order, error) 
 
 func IsTicketReserved(db *database.Database, ticketId string) (bool, error) {
 	var order Order
-	err := db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "ticket_id", Value: ticketId}}).Decode(&order)
+	filter := bson.M{"$in": bson.A{string(OrderCreated), string(OrderAwaitingPayment), string(OrderComplete)}}
+	err := db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "ticket_id", Value: ticketId}, {Key: "status", Value: filter}}).Decode(&order)
+
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false, nil
 		}
 		return false, errors.New("failed to get order: " + err.Error())
-	}
-	if order.Status != nil && *order.Status == string(OrderCreated) {
-		return false, nil
 	}
 	return true, nil
 }

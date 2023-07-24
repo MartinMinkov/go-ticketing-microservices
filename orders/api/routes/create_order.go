@@ -29,13 +29,14 @@ func CreateOrder(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	existingTicket, _ := model.GetSingleTicket(appState.DB, createOrderInput.TicketId())
-	if existingTicket != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "ticket already exists"})
+	existingTicket, err := model.GetSingleTicket(appState.DB, createOrderInput.TicketId())
+	if err != nil {
+		log.Err(err).Msg("Failed to get ticket")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch ticket"})
 		return
 	}
 
-	isReserved, err := model.IsTicketReserved(appState.DB, createOrderInput.TicketId())
+	isReserved, err := model.IsTicketReserved(appState.DB, existingTicket.ID.Hex())
 	if err != nil {
 		log.Err(err).Msg("Failed to check if ticket is reserved")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not fetch ticket"})

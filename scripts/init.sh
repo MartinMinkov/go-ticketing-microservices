@@ -13,4 +13,4 @@ minikube addons enable ingress
 
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
 
-# kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
