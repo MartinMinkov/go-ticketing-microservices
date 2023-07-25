@@ -1,9 +1,11 @@
 package routes
 
 import (
+	"context"
 	"net/http"
 	"time"
 
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/model"
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/state"
@@ -51,11 +53,11 @@ func CreateOrder(c *gin.Context, appState *state.AppState) {
 	order := model.NewOrder(userClaims.ID, createOrderInput.TicketId(), time.Now().Add(30*time.Minute))
 	order.Save(appState.DB)
 
-	// publisher := events.NewPublisher(appState.NatsConn, events.TicketCreated, context.TODO())
-	// err = publisher.Publish(events.NewTicketCreatedEvent(ticket.ID.Hex(), *ticket.UserId, *ticket.Title, *ticket.Price))
-	// if err != nil {
-	// 	log.Err(err).Msg("Failed to publish ticket created event")
-	// }
+	publisher := events.NewPublisher(appState.NatsConn, events.OrderCreated, context.TODO())
+	err = publisher.Publish(events.NewOrderCreatedEvent(order.ID.Hex(), *order.UserId, *order.TicketId, *order.Status, existingTicket.Price, *order.ExpiresAt))
+	if err != nil {
+		log.Err(err).Msg("Failed to publish order created event")
+	}
 
 	c.JSON(http.StatusCreated, order)
 }

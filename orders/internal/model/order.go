@@ -111,10 +111,10 @@ func (o *Order) Update(db *database.Database) error {
 	return nil
 }
 
-func CancelOrder(db *database.Database, id string) error {
+func CancelOrder(db *database.Database, id string) (*Order, error) {
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return errors.New("failed to order ticket ID to ObjectID: " + err.Error())
+		return nil, errors.New("failed to order ticket ID to ObjectID: " + err.Error())
 	}
 	filter := bson.M{"_id": objectId}
 	update := bson.M{
@@ -129,12 +129,12 @@ func CancelOrder(db *database.Database, id string) error {
 
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return errors.New("order not found")
+			return nil, errors.New("order not found")
 		}
-		return errors.New("failed to update order: " + err.Error())
+		return nil, errors.New("failed to update order: " + err.Error())
 	}
 
-	return nil
+	return &updatedOrder, nil
 }
 
 func GetOrderByTicketId(db *database.Database, ticketId string) (*Order, error) {
