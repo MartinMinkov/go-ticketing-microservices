@@ -59,7 +59,7 @@ func NewListener(ns *nats.Conn, subject Subjects, queueGroupName string, ackWait
 }
 
 func (l *Listener) Listen() error {
-	s, err := createStream(l.ctx, l.js, string(l.subject))
+	s, err := createStream(l.ctx, l.js, string(l.subject), l.queueGroupName)
 	if err != nil {
 		log.Info().Msgf("createStream error: %v", err)
 	}
@@ -75,8 +75,9 @@ func (l *Listener) Listen() error {
 	return nil
 }
 
-func createStream(ctx context.Context, js jetstream.JetStream, subject string) (jetstream.Stream, error) {
+func createStream(ctx context.Context, js jetstream.JetStream, subject string, queueGroupName string) (jetstream.Stream, error) {
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
+		Name:     queueGroupName,
 		Subjects: []string{subject},
 	})
 	if err != nil {
