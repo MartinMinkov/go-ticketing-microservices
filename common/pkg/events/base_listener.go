@@ -103,16 +103,16 @@ func (l *Listener) consume(j jetstream.Consumer, ctx context.Context) {
 		data, err := l.parser.ParseMessage(msg)
 		if err != nil {
 			log.Info().Msgf("parseMessage error: %v", err)
+			return
 		}
 		l.handler.OnMessage(data, msg)
 	}, jetstream.ConsumeErrHandler(func(consumeCtx jetstream.ConsumeContext, err error) {
-		fmt.Println(err)
+		fmt.Println("consume error handler: ", err)
 	}))
 	if err != nil {
 		log.Fatal().Msgf("consume error: %v", err)
 	}
 
 	<-ctx.Done()
-
 	defer cc.Stop()
 }
