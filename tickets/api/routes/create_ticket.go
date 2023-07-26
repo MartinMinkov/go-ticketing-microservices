@@ -38,7 +38,7 @@ func CreateTicket(c *gin.Context, appState *state.AppState) {
 	ticket.Save(appState.DB)
 
 	publisher := events.NewPublisher(appState.NatsConn, events.TicketCreated, context.TODO())
-	err = publisher.Publish(events.NewTicketCreatedEvent(ticket.ID.Hex(), ticket.UserId, ticket.Title, ticket.Price))
+	err = publisher.Publish(events.NewTicketCreatedEvent(ticket.ID.Hex(), ticket.UserId, ticket.Title, ticket.Price, ticket.Version))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish ticket created event")
 	}

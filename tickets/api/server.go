@@ -45,7 +45,7 @@ func InitLogger() {
 func BuildAppState(config *config.Config) *state.AppState {
 	db := database.ConnectDB(config)
 
-	nc, err := events.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*15)
+	nc, err := events.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*60)
 	if err != nil {
 		panic("Failed to connect to NATS")
 	}

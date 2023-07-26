@@ -44,8 +44,8 @@ func InitEventListeners(appState *state.AppState) {
 	ticketCreatedListener := listeners.NewTicketCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
 	ticketCreatedListener.Listener.Listen()
 
-	// ticketUpdatedListener := listeners.NewTicketUpdatedListener(appState.NatsConn, time.Second*5, appState.DB, appState.DB.Ctx)
-	// ticketUpdatedListener.Listener.Listen()
+	ticketUpdatedListener := listeners.NewTicketUpdatedListener(appState.NatsConn, time.Second*5, appState.DB, appState.DB.Ctx)
+	ticketUpdatedListener.Listener.Listen()
 }
 
 func InitLogger() {
@@ -56,7 +56,7 @@ func InitLogger() {
 func BuildAppState(config *config.Config) *state.AppState {
 	db := database.ConnectDB(config)
 
-	nc, err := e.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*15)
+	nc, err := e.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*60)
 	if err != nil {
 		panic("Failed to connect to NATS")
 	}

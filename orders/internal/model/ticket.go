@@ -28,10 +28,6 @@ func NewTicket(userId string, title string, price int64) *Ticket {
 	}
 }
 
-func (t *Ticket) incrementVersion() int64 {
-	return t.Version + int64(1)
-}
-
 func GetAllTickets(db *database.Database, userId string) ([]*Ticket, error) {
 	var tickets []*Ticket
 	cursor, err := db.TicketCollection.Find(db.Ctx, bson.D{{Key: "user_id", Value: userId}})
@@ -72,12 +68,12 @@ func (t *Ticket) Save(db *database.Database) error {
 }
 
 func (t *Ticket) Update(db *database.Database) error {
-	filter := bson.M{"_id": t.ID, "version": t.Version}
+	filter := bson.M{"_id": t.ID, "version": t.Version - 1}
 	update := bson.M{
 		"$set": bson.M{
 			"title":   t.Title,
 			"price":   t.Price,
-			"version": t.incrementVersion(),
+			"version": t.Version,
 		},
 	}
 

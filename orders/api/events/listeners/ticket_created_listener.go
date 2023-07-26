@@ -40,6 +40,7 @@ func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) e
 	}
 
 	ticket := model.NewTicket(ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
+	ticket.Version = ticketCreatedEvent.Data.Version
 	err := ticket.Save(t.db)
 	if err != nil {
 		log.Default().Println("listener: Could not save ticket in DB", err)

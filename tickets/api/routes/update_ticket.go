@@ -47,7 +47,6 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 
 	currentTicket.Title = updateticketInput.TitleField
 	currentTicket.Price = updateticketInput.PriceField
-	currentTicket.Version = updateticketInput.VersionField
 
 	err = currentTicket.Update(appState.DB)
 	if err != nil {
@@ -56,7 +55,7 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 	}
 
 	publisher := events.NewPublisher(appState.NatsConn, events.TicketUpdated, context.TODO())
-	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), currentTicket.UserId, currentTicket.Title, currentTicket.Price))
+	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), currentTicket.UserId, currentTicket.Title, currentTicket.Price, currentTicket.Version))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish ticket update event")
 	}
@@ -65,10 +64,9 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 }
 
 type updateTicketCreated struct {
-	IdField      string `json:"id" validate:"required"`
-	TitleField   string `json:"title" validate:"required,min=1,max=100"`
-	PriceField   int64  `json:"price"`
-	VersionField int64  `json:"version"`
+	IdField    string `json:"id" validate:"required"`
+	TitleField string `json:"title" validate:"required,min=1,max=100"`
+	PriceField int64  `json:"price"`
 }
 
 func (c updateTicketCreated) ID() string {
@@ -81,8 +79,4 @@ func (c updateTicketCreated) Title() string {
 
 func (c updateTicketCreated) Price() int64 {
 	return c.PriceField
-}
-
-func (c updateTicketCreated) Version() int64 {
-	return c.VersionField
 }

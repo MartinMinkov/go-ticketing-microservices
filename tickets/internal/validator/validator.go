@@ -26,10 +26,9 @@ func ValidateTicket(c *gin.Context, input TicketInput) error {
 
 func ValidateUpdateTicket(c *gin.Context, input TicketInput) error {
 	validateFields := map[string]string{
-		"ID":      "ID validation error",
-		"Title":   "Title validation error",
-		"Price":   "Price validation error",
-		"Version": "Version validation error",
+		"ID":    "ID validation error",
+		"Title": "Title validation error",
+		"Price": "Price validation error",
 	}
 	errMessages, err := v.ValidateInput(input, validateFields)
 	if err != nil {
