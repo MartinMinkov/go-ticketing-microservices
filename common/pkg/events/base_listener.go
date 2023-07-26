@@ -105,10 +105,15 @@ func (l *Listener) consume(j jetstream.Consumer, ctx context.Context) {
 			log.Info().Msgf("parseMessage error: %v", err)
 			return
 		}
-		l.handler.OnMessage(data, msg)
+		err = l.handler.OnMessage(data, msg)
+		if err != nil {
+			log.Info().Msgf("onMessage error: %v", err)
+			return
+		}
 	}, jetstream.ConsumeErrHandler(func(consumeCtx jetstream.ConsumeContext, err error) {
 		fmt.Println("consume error handler: ", err)
 	}))
+
 	if err != nil {
 		log.Fatal().Msgf("consume error: %v", err)
 	}
