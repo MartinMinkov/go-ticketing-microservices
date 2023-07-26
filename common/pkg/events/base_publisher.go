@@ -3,6 +3,7 @@ package events
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/nats-io/nats.go"
 	"github.com/rs/zerolog/log"
@@ -34,6 +35,8 @@ func (p *Publisher) Publish(data interface{}) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("Publishing to subject: ", string(p.subject))
+	fmt.Println("Data: ", string(dataBytes))
 	if _, err := p.js.Publish(string(p.subject), dataBytes); err != nil {
 		return err
 	}

@@ -1,13 +1,15 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
-	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
+	e "github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
+	"github.com/MartinMinkov/go-ticketing-microservices/orders/api/events/listeners"
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/api/routes"
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/config"
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/database"
@@ -38,6 +40,14 @@ func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 	}
 }
 
+func InitEventListeners(appState *state.AppState) {
+	ticketCreatedListener := listeners.NewTicketCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+	ticketCreatedListener.Listener.Listen()
+
+	// ticketUpdatedListener := listeners.NewTicketUpdatedListener(appState.NatsConn, time.Second*5, appState.DB, appState.DB.Ctx)
+	// ticketUpdatedListener.Listener.Listen()
+}
+
 func InitLogger() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
@@ -46,7 +56,7 @@ func InitLogger() {
 func BuildAppState(config *config.Config) *state.AppState {
 	db := database.ConnectDB(config)
 
-	nc, err := events.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*15)
+	nc, err := e.ConnectWithRetry(config.NatsConfig.GetAddress(), time.Second*5, time.Second*15)
 	if err != nil {
 		panic("Failed to connect to NATS")
 	}

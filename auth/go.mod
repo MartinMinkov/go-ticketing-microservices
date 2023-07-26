@@ -3,7 +3,7 @@ module github.com/MartinMinkov/go-ticketing-microservices/auth
 go 1.20
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230720221730-12b1893360c3
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230726042821-13e792fa1b89
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/rs/zerolog v1.29.1
@@ -22,7 +22,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
