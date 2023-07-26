@@ -21,47 +21,33 @@ type TicketCreatedListener struct {
 }
 
 func (t *TicketCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, error) {
-	log.Default().Println("ParseMessage")
-
 	var ticketCreatedEvent e.TicketCreatedEvent
-
-	log.Default().Println("Raw Message Data: ", string(msg.Data()))
-
 	err := json.Unmarshal(msg.Data(), &ticketCreatedEvent)
 	if err != nil {
-		log.Default().Println("Ticket created event error1: ", err)
+		log.Default().Println("listener: Could not unmarshal data", err)
+		msg.Ack()
 		return nil, err
 	}
-	log.Default().Println("Ticket Event Data: ", ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
 	return ticketCreatedEvent, nil
 }
 
 func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) error {
-	log.Default().Println("OnMessage")
-	jsonData, ok := data.([]byte)
+	ticketCreatedEvent, ok := data.(e.TicketCreatedEvent)
 	if !ok {
+		log.Default().Println("listener: Could not cast data to TicketCreatedEvent")
+		msg.Ack()
 		return nil
 	}
 
-	log.Default().Println("Ticket created event received")
-	log.Default().Println("Raw Message Data: ", string(jsonData))
-
-	var ticketCreatedEvent e.TicketCreatedEvent
-	err := json.Unmarshal(jsonData, &ticketCreatedEvent)
+	ticket := model.NewTicket(ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
+	err := ticket.Save(t.db)
 	if err != nil {
-		log.Default().Println("Ticket created event error2: ", err)
+		log.Default().Println("listener: Could not save ticket in DB", err)
+		msg.Ack()
 		return err
 	}
 
-	log.Default().Println("Ticket Data: ", ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
-
-	ticket := model.NewTicket(ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
-	ticket.Save(t.db)
-
 	msg.Ack()
-
-	log.Default().Println("Ticket created event processed")
-
 	return nil
 }
 

@@ -1,5 +1,5 @@
-github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230725052603-d03f3041e8fe h1:91NWLPjdJ/Gzd0+F9wULzWCrdhDDZAGWhD80GLcGdDY=
-github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230725052603-d03f3041e8fe/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230726050132-a6f2dfb4520a h1:rxtHPMRXvfXRD33qcStCEpUv4mRSs3e+Z11qKQAWx8g=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230726050132-a6f2dfb4520a/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.9.2 h1:GDaNjuWSGu09guE9Oql0MSTNhNCLlWwO8y/xM5BzcbM=
 github.com/bytedance/sonic v1.9.2/go.mod h1:i736AoUSYt75HyZLoJW9ERYxcy6eaN6h4BZXU064P/U=
