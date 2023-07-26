@@ -1,9 +1,8 @@
 package events
 
 import (
-	"bytes"
 	"context"
-	"encoding/gob"
+	"encoding/json"
 
 	"github.com/nats-io/nats.go"
 	"github.com/rs/zerolog/log"
@@ -31,12 +30,11 @@ func NewPublisher(ns *nats.Conn, subject Subjects, ctx context.Context) *Publish
 }
 
 func (p *Publisher) Publish(data interface{}) error {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	if err := enc.Encode(data); err != nil {
+	dataBytes, err := json.Marshal(data)
+	if err != nil {
 		return err
 	}
-	if _, err := p.js.Publish(string(p.subject), buf.Bytes()); err != nil {
+	if _, err := p.js.Publish(string(p.subject), dataBytes); err != nil {
 		return err
 	}
 	return nil
