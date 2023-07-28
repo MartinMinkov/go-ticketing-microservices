@@ -6,7 +6,7 @@ type OrderCancelledEventTicketData struct {
 
 type OrderCancelledEventData struct {
 	Id     string `json:"id"`
-	ticket OrderCancelledEventTicketData
+	Ticket OrderCancelledEventTicketData
 }
 
 type OrderCancelledEvent struct {
@@ -19,7 +19,7 @@ func NewOrderCancelledEvent(id string, ticketId string) *OrderCancelledEvent {
 		Subject: OrderCancelled,
 		Data: OrderCancelledEventData{
 			Id: id,
-			ticket: OrderCancelledEventTicketData{
+			Ticket: OrderCancelledEventTicketData{
 				Id: ticketId,
 			},
 		},

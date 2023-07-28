@@ -12,7 +12,7 @@ type OrderCreatedEventData struct {
 	UserId    string    `json:"user_id"`
 	Status    string    `json:"title"`
 	ExpiresAt time.Time `json:"expires_at"`
-	ticket    OrderCreatedEventTicketData
+	Ticket    OrderCreatedEventTicketData
 }
 
 type OrderCreatedEvent struct {
@@ -28,7 +28,7 @@ func NewOrderCreatedEvent(id string, userId string, ticketId string, status stri
 			UserId:    userId,
 			Status:    status,
 			ExpiresAt: expiresAt,
-			ticket: OrderCreatedEventTicketData{
+			Ticket: OrderCreatedEventTicketData{
 				Id:    ticketId,
 				Price: price,
 			},
