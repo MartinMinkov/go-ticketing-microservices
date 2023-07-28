@@ -33,9 +33,13 @@ func (t *TicketCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, er
 
 func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) error {
 	ticketCreatedEvent, ok := data.(e.TicketCreatedEvent)
+
+	defer func() {
+		msg.Ack()
+	}()
+
 	if !ok {
 		log.Default().Println("listener: Could not cast data to TicketCreatedEvent")
-		msg.Ack()
 		return nil
 	}
 
@@ -44,11 +48,9 @@ func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) e
 	err := ticket.Save(t.db)
 	if err != nil {
 		log.Default().Println("listener: Could not save ticket in DB", err)
-		msg.Ack()
 		return err
 	}
 
-	msg.Ack()
 	return nil
 }
 
