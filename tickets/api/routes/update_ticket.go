@@ -55,7 +55,7 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 	}
 
 	publisher := events.NewPublisher(appState.NatsConn, events.TicketUpdated, context.TODO())
-	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), currentTicket.UserId, currentTicket.Title, currentTicket.Price, currentTicket.Version))
+	err = publisher.Publish(events.NewTicketUpdatedEvent(currentTicket.ID.Hex(), currentTicket.UserId, *currentTicket.OrderId, currentTicket.Title, currentTicket.Price, currentTicket.Version))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish ticket update event")
 	}

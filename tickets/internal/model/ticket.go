@@ -14,6 +14,7 @@ import (
 type Ticket struct {
 	ID      primitive.ObjectID `bson:"_id" json:"id"`
 	UserId  string             `bson:"user_id" json:"user_id" validate:"required"`
+	OrderId *string            `bson:"order_id" json:"order_id"`
 	Title   string             `bson:"title" json:"title" validate:"required"`
 	Price   int64              `bson:"price" json:"price"`
 	Version int64              `bson:"version" json:"version"`
