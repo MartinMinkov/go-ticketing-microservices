@@ -30,9 +30,9 @@ type MessageHandler interface {
 }
 
 type Listener struct {
-	ns             *nats.Conn
-	js             jetstream.JetStream
-	ctx            context.Context
+	Ns             *nats.Conn
+	Js             jetstream.JetStream
+	Ctx            context.Context
 	subject        Subjects
 	queueGroupName string
 	ackWait        time.Duration
@@ -47,9 +47,9 @@ func NewListener(ns *nats.Conn, subject Subjects, queueGroupName string, ackWait
 	}
 
 	return &Listener{
-		ns:             ns,
-		js:             js,
-		ctx:            ctx,
+		Ns:             ns,
+		Js:             js,
+		Ctx:            ctx,
 		subject:        subject,
 		queueGroupName: queueGroupName,
 		ackWait:        ackWait,
@@ -59,19 +59,19 @@ func NewListener(ns *nats.Conn, subject Subjects, queueGroupName string, ackWait
 }
 
 func (l *Listener) Listen() error {
-	s, err := createStream(l.ctx, l.js, string(l.subject), l.queueGroupName)
+	s, err := createStream(l.Ctx, l.Js, string(l.subject), l.queueGroupName)
 	if err != nil {
 		log.Info().Msgf("createStream error: %v", err)
 	}
 
-	cons, err := createConsumer(l.ctx, s, l.queueGroupName, l.ackWait)
+	cons, err := createConsumer(l.Ctx, s, l.queueGroupName, l.ackWait)
 	if err != nil {
 		log.Info().Msgf("createConsumer error: %v", err)
 	}
 
-	l.consume(cons, l.ctx)
+	l.consume(cons, l.Ctx)
 
-	<-l.ctx.Done()
+	<-l.Ctx.Done()
 	return nil
 }
 
