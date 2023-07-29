@@ -17,6 +17,8 @@ func main() {
 	server := api.BuildServer(config, appState)
 	defer appState.DBCleanup()
 
+	api.InitEventListeners(appState)
+
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Printf("listen: %s\n", err)

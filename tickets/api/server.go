@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
+	"github.com/MartinMinkov/go-ticketing-microservices/tickets/api/events/listeners"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/api/routes"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/config"
 	"github.com/MartinMinkov/go-ticketing-microservices/tickets/internal/database"
@@ -35,6 +37,14 @@ func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 		Addr:    ":" + cfg.ApplicationConfig.Port,
 		Handler: r,
 	}
+}
+
+func InitEventListeners(appState *state.AppState) {
+	orderCreatedListener := listeners.NewOrderCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+	orderCreatedListener.Listener.Listen()
+
+	orderCancelledListener := listeners.NewOrderCancelledListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+	orderCancelledListener.Listener.Listen()
 }
 
 func InitLogger() {

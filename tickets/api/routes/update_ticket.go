@@ -32,16 +32,24 @@ func UpdateTicket(c *gin.Context, appState *state.AppState) {
 
 	currentTicket, err := model.GetSingleTicket(appState.DB, updateticketInput.ID())
 	if err != nil {
+		log.Err(err).Msg("Failed to get ticket")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get ticket"})
 		return
 	}
 	if currentTicket == nil {
+		log.Debug().Msgf("currentTicket: %+v", currentTicket)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "ticket does not exist"})
 		return
 	}
 
 	if currentTicket.UserId != userClaims.ID {
+		log.Debug().Msgf("currentTicket.UserId: %+v", currentTicket.UserId)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "not authorized to update ticket"})
+		return
+	}
+	if (currentTicket.OrderId != nil) && (*currentTicket.OrderId != "") {
+		log.Debug().Msgf("currentTicket.OrderId: %+v", *currentTicket.OrderId)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cannot update reserved ticket"})
 		return
 	}
 
