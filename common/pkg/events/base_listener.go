@@ -67,6 +67,7 @@ func (l *Listener) Listen() error {
 	cons, err := createConsumer(l.Ctx, s, l.queueGroupName, l.ackWait)
 	if err != nil {
 		log.Info().Msgf("createConsumer error: %v", err)
+		return err
 	}
 
 	l.consume(cons, l.Ctx)
@@ -77,7 +78,7 @@ func (l *Listener) Listen() error {
 
 func createStream(ctx context.Context, js jetstream.JetStream, subject string, queueGroupName string) (jetstream.Stream, error) {
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
-		Name:     queueGroupName,
+		Name:     fmt.Sprintf("%s-%s", queueGroupName, subject),
 		Subjects: []string{subject},
 	})
 	if err != nil {
@@ -88,9 +89,10 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 
 func createConsumer(ctx context.Context, s jetstream.Stream, queueGroupName string, ackWait time.Duration) (jetstream.Consumer, error) {
 	cons, err := s.CreateOrUpdateConsumer(ctx, jetstream.ConsumerConfig{
-		Durable:   queueGroupName,
-		AckPolicy: jetstream.AckExplicitPolicy,
-		AckWait:   ackWait,
+		Durable:       queueGroupName,
+		AckPolicy:     jetstream.AckExplicitPolicy,
+		AckWait:       ackWait,
+		MaxAckPending: 60,
 	})
 	if err != nil {
 		return nil, err
