@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/database"
 	"go.mongodb.org/mongo-driver/bson"
