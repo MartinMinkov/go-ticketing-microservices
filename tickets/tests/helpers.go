@@ -140,6 +140,8 @@ func SpawnApp() *TestApp {
 	gin.SetMode(gin.ReleaseMode)
 	server := api.BuildServer(config, appState)
 
+	api.InitEventListeners(appState)
+
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			panic(err)

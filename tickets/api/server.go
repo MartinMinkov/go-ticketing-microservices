@@ -40,11 +40,14 @@ func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 }
 
 func InitEventListeners(appState *state.AppState) {
-	orderCreatedListener := listeners.NewOrderCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
-	orderCreatedListener.Listener.Listen()
-
-	orderCancelledListener := listeners.NewOrderCancelledListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
-	orderCancelledListener.Listener.Listen()
+	go func() {
+		orderCreatedListener := listeners.NewOrderCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		orderCreatedListener.Listener.Listen()
+	}()
+	go func() {
+		orderCancelledListener := listeners.NewOrderCancelledListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		orderCancelledListener.Listener.Listen()
+	}()
 }
 
 func InitLogger() {
