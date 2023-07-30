@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -41,11 +42,20 @@ func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 }
 
 func InitEventListeners(appState *state.AppState) {
-	ticketCreatedListener := listeners.NewTicketCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
-	ticketCreatedListener.Listener.Listen()
-
-	ticketUpdatedListener := listeners.NewTicketUpdatedListener(appState.NatsConn, time.Second*5, appState.DB, appState.DB.Ctx)
-	ticketUpdatedListener.Listener.Listen()
+	go func() {
+		ticketCreatedListener := listeners.NewTicketCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		if err := ticketCreatedListener.Listener.Listen(); err != nil {
+			log.Err(err).Msg("Failed to start ticket created listener")
+			fmt.Println(err.Error())
+		}
+	}()
+	go func() {
+		ticketUpdatedListener := listeners.NewTicketUpdatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		if err := ticketUpdatedListener.Listener.Listen(); err != nil {
+			log.Err(err).Msg("Failed to start ticket updated listener")
+			fmt.Println(err.Error())
+		}
+	}()
 }
 
 func InitLogger() {

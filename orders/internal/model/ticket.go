@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/database"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,6 +14,7 @@ import (
 
 type Ticket struct {
 	ID      primitive.ObjectID `bson:"_id" json:"id"`
+	UserId  string             `bson:"user_id" json:"user_id"`
 	Title   string             `bson:"title" json:"title"`
 	Price   int64              `bson:"price" json:"price"`
 	Version int64              `bson:"version" json:"version"`
@@ -22,6 +24,7 @@ func NewTicket(userId string, title string, price int64) *Ticket {
 	defaultVersion := int64(0)
 	return &Ticket{
 		ID:      primitive.NewObjectID(),
+		UserId:  userId,
 		Title:   title,
 		Price:   price,
 		Version: defaultVersion,

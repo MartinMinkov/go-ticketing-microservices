@@ -11,6 +11,7 @@ import (
 	"github.com/MartinMinkov/go-ticketing-microservices/orders/internal/model"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 const QueueGroupName = "orders-service"
@@ -43,14 +44,20 @@ func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) e
 		return nil
 	}
 
-	ticket := model.NewTicket(ticketCreatedEvent.Data.Id, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
+	ticket := model.NewTicket(ticketCreatedEvent.Data.UserId, ticketCreatedEvent.Data.Title, ticketCreatedEvent.Data.Price)
+	id, err := primitive.ObjectIDFromHex(ticketCreatedEvent.Data.Id)
+	if err != nil {
+		log.Default().Println("listener: Could not parse ticket id", err)
+		return err
+	}
+
+	ticket.ID = id
 	ticket.Version = ticketCreatedEvent.Data.Version
-	err := ticket.Save(t.db)
+	err = ticket.Save(t.db)
 	if err != nil {
 		log.Default().Println("listener: Could not save ticket in DB", err)
 		return err
 	}
-
 	return nil
 }
 

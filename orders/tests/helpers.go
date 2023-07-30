@@ -127,6 +127,10 @@ func SpawnApp() *TestApp {
 	server := api.BuildServer(config, appState)
 
 	go func() {
+		api.InitEventListeners(appState)
+	}()
+
+	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			panic(err)
 		}
@@ -142,6 +146,14 @@ func SpawnApp() *TestApp {
 		Mocks: &Mocks{
 			TicketIds: ticketIds,
 		},
+	}
+}
+
+func (app *TestApp) Wait(duration time.Duration) {
+	if duration == 0 {
+		time.Sleep(100 * time.Millisecond)
+	} else {
+		time.Sleep(duration * time.Millisecond)
 	}
 }
 
