@@ -26,7 +26,6 @@ func (t *TicketCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, er
 	err := json.Unmarshal(msg.Data(), &ticketCreatedEvent)
 	if err != nil {
 		log.Default().Println("listener: Could not unmarshal data", err)
-		msg.Ack()
 		return nil, err
 	}
 	return ticketCreatedEvent, nil
@@ -34,10 +33,6 @@ func (t *TicketCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, er
 
 func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) error {
 	ticketCreatedEvent, ok := data.(e.TicketCreatedEvent)
-
-	defer func() {
-		msg.Ack()
-	}()
 
 	if !ok {
 		log.Default().Println("listener: Could not cast data to TicketCreatedEvent")
@@ -58,6 +53,8 @@ func (t *TicketCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) e
 		log.Default().Println("listener: Could not save ticket in DB", err)
 		return err
 	}
+
+	msg.Ack()
 	return nil
 }
 

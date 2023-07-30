@@ -24,7 +24,6 @@ func (t *TicketUpdatedListener) ParseMessage(msg jetstream.Msg) (interface{}, er
 	err := json.Unmarshal(msg.Data(), &ticketUpdatedEvent)
 	if err != nil {
 		log.Default().Println("update listener: Could not unmarshal data", err)
-		msg.Ack()
 		return nil, err
 	}
 	return ticketUpdatedEvent, nil
@@ -32,10 +31,6 @@ func (t *TicketUpdatedListener) ParseMessage(msg jetstream.Msg) (interface{}, er
 
 func (t *TicketUpdatedListener) OnMessage(data interface{}, msg jetstream.Msg) error {
 	ticketUpdatedEvent, ok := data.(e.TicketUpdatedEvent)
-
-	defer func() {
-		msg.Ack()
-	}()
 
 	if !ok {
 		log.Default().Println("update listener: Could not cast data to []byte", data)
@@ -55,6 +50,8 @@ func (t *TicketUpdatedListener) OnMessage(data interface{}, msg jetstream.Msg) e
 	if err != nil {
 		return err
 	}
+
+	msg.Ack()
 	return nil
 }
 

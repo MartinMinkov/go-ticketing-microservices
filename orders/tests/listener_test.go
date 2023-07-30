@@ -65,4 +65,7 @@ func TestTicketUpdatedListenerUpdatesTicket(t *testing.T) {
 	if ticket.Price != 110 {
 		t.Errorf("expected price %d, got %d", 110, ticket.Price)
 	}
+	if ticket.Version != 1 {
+		t.Errorf("expected version %d, got %d", 1, ticket.Version)
+	}
 }
