@@ -35,16 +35,6 @@ func TestDeleteOrderIsSuccessful(t *testing.T) {
 	if resp.StatusCode != http.StatusNoContent {
 		t.Errorf("expected status code %d, got %d", http.StatusNoContent, resp.StatusCode)
 	}
-
-	// resp = app.GetOrder(order.ID.Hex(), &user)
-	// defer resp.Body.Close()
-
-	// if err := utils.ReadJSON(resp, &order); err != nil {
-	// 	t.Fatal(err)
-	// }
-	// if *order.Status != string(model.OrderCancelled) {
-	// 	t.Errorf("expected order status %s, got %s", string(model.OrderCancelled), *order.Status)
-	// }
 }
 
 func TestDeleteOrderFailsWhenOrderDoesNotExist(t *testing.T) {
@@ -75,16 +65,4 @@ func TestDeleteOrderFailsWhenUserIsUnauthenticated(t *testing.T) {
 	if resp.StatusCode != http.StatusCreated {
 		t.Errorf("expected status code %d, got %d", http.StatusCreated, resp.StatusCode)
 	}
-
-	// var order model.Order
-	// if err := utils.ReadJSON(resp, &order); err != nil {
-	// 	t.Fatal(err)
-	// }
-
-	// resp = app.DeleteOrder(order.ID.Hex(), nil)
-	// defer resp.Body.Close()
-
-	// if resp.StatusCode != http.StatusUnauthorized {
-	// 	t.Errorf("expected status code %d, got %d", http.StatusUnauthorized, resp.StatusCode)
-	// }
 }
