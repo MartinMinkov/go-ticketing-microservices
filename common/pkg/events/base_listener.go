@@ -85,7 +85,6 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 		return existingStream, nil
 	}
 
-	log.Info().Msgf("creating stream: %s", streamName)
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
 		Name:     streamName,
 		Subjects: []string{subject},
@@ -97,7 +96,6 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 }
 
 func createConsumer(ctx context.Context, s jetstream.Stream, queueGroupName string, ackWait time.Duration) (jetstream.Consumer, error) {
-	log.Info().Msgf("creating consumer: %s", queueGroupName)
 	info, err := s.Info(ctx)
 	if err != nil {
 		log.Info().Msgf("s.Info error: %v", err)
