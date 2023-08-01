@@ -15,7 +15,9 @@ func main() {
 	config := config.BuildConfig()
 	appState := api.BuildAppState(config)
 	server := api.BuildServer(config, appState)
-	defer appState.DBCleanup()
+	defer func() {
+		appState.DBCleanup()
+	}()
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
