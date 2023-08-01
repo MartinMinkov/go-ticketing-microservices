@@ -21,6 +21,8 @@ const (
 	OrderComplete        Status = "complete"
 )
 
+const DefaultDuration = time.Minute * 2
+
 type Order struct {
 	ID        primitive.ObjectID `bson:"_id" json:"id"`
 	UserId    *string            `bson:"user_id" json:"user_id" validate:"required"`
@@ -30,15 +32,16 @@ type Order struct {
 	Version   *int64             `bson:"version" json:"version"`
 }
 
-func NewOrder(userId string, ticketId string, expiresAt time.Time) *Order {
+func NewOrder(userId string, ticketId string) *Order {
 	defaultVersion := int64(0)
 	defaultStatus := string(OrderCreated)
+	defaultExpiresAt := time.Now().Add(DefaultDuration)
 	return &Order{
 		ID:        primitive.NewObjectID(),
 		UserId:    &userId,
 		TicketId:  &ticketId,
 		Status:    &defaultStatus,
-		ExpiresAt: &expiresAt,
+		ExpiresAt: &defaultExpiresAt,
 		Version:   &defaultVersion,
 	}
 }

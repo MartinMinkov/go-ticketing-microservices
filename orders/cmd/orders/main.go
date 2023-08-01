@@ -15,7 +15,10 @@ func main() {
 	config := config.BuildConfig()
 	appState := api.BuildAppState(config)
 	server := api.BuildServer(config, appState)
-	defer appState.DBCleanup()
+	defer func() {
+		appState.DBCleanup()
+		appState.NatsCleanup()
+	}()
 
 	api.InitEventListeners(appState)
 

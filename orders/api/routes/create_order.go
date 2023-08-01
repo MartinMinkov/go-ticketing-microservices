@@ -3,7 +3,6 @@ package routes
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
@@ -50,7 +49,7 @@ func CreateOrder(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	order := model.NewOrder(userClaims.ID, createOrderInput.TicketId(), time.Now().Add(30*time.Minute))
+	order := model.NewOrder(userClaims.ID, createOrderInput.TicketId())
 	order.Save(appState.DB)
 
 	publisher := events.NewPublisher(appState.NatsConn, events.OrderCreated, context.TODO())
