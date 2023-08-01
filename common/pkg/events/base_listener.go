@@ -77,7 +77,7 @@ func (l *Listener) Listen() error {
 }
 
 func createStream(ctx context.Context, js jetstream.JetStream, subject string, queueGroupName string) (jetstream.Stream, error) {
-	streamName := fmt.Sprintf("%s-%s", queueGroupName, subject)
+	streamName := fmt.Sprintf("%s-stream", subject)
 
 	existingStream, err := js.Stream(ctx, streamName)
 	if err != nil && existingStream != nil {
@@ -85,6 +85,7 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 		return existingStream, nil
 	}
 
+	log.Info().Msgf("creating stream: %s", streamName)
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
 		Name:     streamName,
 		Subjects: []string{subject},
