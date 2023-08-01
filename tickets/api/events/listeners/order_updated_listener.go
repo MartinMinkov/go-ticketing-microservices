@@ -50,7 +50,7 @@ func (t *OrderCancelledListener) OnMessage(data interface{}, msg jetstream.Msg) 
 	}
 
 	publisher := events.NewPublisher(t.Listener.Ns, events.TicketUpdated, context.TODO())
-	err = publisher.Publish(events.NewTicketUpdatedEvent(ticket.ID.Hex(), ticket.UserId, *ticket.OrderId, ticket.Title, ticket.Price, ticket.Version))
+	err = publisher.Publish(events.NewTicketUpdatedEvent(ticket.ID.Hex(), ticket.UserId, "", ticket.Title, ticket.Price, ticket.Version))
 	if err != nil {
 		log.Default().Println("listener: Could not publish ticket updated event", err)
 		return err
