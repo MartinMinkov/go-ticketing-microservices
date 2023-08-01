@@ -81,11 +81,12 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 
 	existingStream, err := js.Stream(ctx, streamName)
 	if err != nil && existingStream != nil {
+		log.Info().Msgf("returning existing stream: %s", streamName)
 		return existingStream, nil
 	}
 
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
-		Name:     fmt.Sprintf("%s-%s", queueGroupName, subject),
+		Name:     streamName,
 		Subjects: []string{subject},
 	})
 	if err != nil {
