@@ -87,9 +87,10 @@ func (t *Ticket) Update(db *database.Database) error {
 	filter := bson.M{"_id": t.ID, "version": t.Version}
 	update := bson.M{
 		"$set": bson.M{
-			"title":   t.Title,
-			"price":   t.Price,
-			"version": t.incrementVersion(),
+			"title":    t.Title,
+			"price":    t.Price,
+			"order_id": t.OrderId,
+			"version":  t.incrementVersion(),
 		},
 	}
 

@@ -158,6 +158,10 @@ func SpawnApp() *TestApp {
 	}
 }
 
+func (app *TestApp) Wait(ms int) {
+	time.Sleep(time.Duration(ms) * time.Millisecond)
+}
+
 func (app *TestApp) Cleanup() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

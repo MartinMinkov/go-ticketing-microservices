@@ -6,6 +6,8 @@ github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230729231856-
 github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230729231856-09d67c8f6cfa/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
 github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230729235856-9f33a8cbcd25 h1:ngDwz/wv3dej5f25RDPygFdxJE+xruyqJT6fz65nJ7o=
 github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230729235856-9f33a8cbcd25/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230731000211-cf67c75ce4fe h1:dKpCBLAVx3LvR3r9d4f2KdYNLRTj8FQhBro6VBySP8o=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230731000211-cf67c75ce4fe/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.9.2 h1:GDaNjuWSGu09guE9Oql0MSTNhNCLlWwO8y/xM5BzcbM=
 github.com/bytedance/sonic v1.9.2/go.mod h1:i736AoUSYt75HyZLoJW9ERYxcy6eaN6h4BZXU064P/U=

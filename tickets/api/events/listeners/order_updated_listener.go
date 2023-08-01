@@ -24,7 +24,6 @@ func (t *OrderCancelledListener) ParseMessage(msg jetstream.Msg) (interface{}, e
 	err := json.Unmarshal(msg.Data(), &orderCancelledEvent)
 	if err != nil {
 		log.Default().Println("listener: Could not unmarshal data", err)
-		msg.Ack()
 		return nil, err
 	}
 	return orderCancelledEvent, nil
@@ -32,11 +31,6 @@ func (t *OrderCancelledListener) ParseMessage(msg jetstream.Msg) (interface{}, e
 
 func (t *OrderCancelledListener) OnMessage(data interface{}, msg jetstream.Msg) error {
 	orderCancelledEvent, ok := data.(e.OrderCancelledEvent)
-
-	defer func() {
-		msg.Ack()
-	}()
-
 	if !ok {
 		log.Default().Println("listener: Could not cast data to OrderCancelledEvent")
 		return nil
@@ -47,6 +41,7 @@ func (t *OrderCancelledListener) OnMessage(data interface{}, msg jetstream.Msg) 
 		log.Default().Println("listener: Could not get ticket from DB", err)
 		return err
 	}
+
 	ticket.OrderId = nil
 	err = ticket.Update(t.db)
 	if err != nil {
@@ -61,12 +56,13 @@ func (t *OrderCancelledListener) OnMessage(data interface{}, msg jetstream.Msg) 
 		return err
 	}
 
+	msg.Ack()
 	return nil
 }
 
 func NewOrderCancelledListener(ns *nats.Conn, ackWait time.Duration, db *database.Database, ctx context.Context) *OrderCancelledListener {
 	t := &OrderCancelledListener{}
-	listener := e.NewListener(ns, e.OrderCreated, QueueGroupName, ackWait, t, t, ctx)
+	listener := e.NewListener(ns, e.OrderCancelled, QueueGroupName, ackWait, t, t, ctx)
 	t.Listener = listener
 	t.db = db
 	return t

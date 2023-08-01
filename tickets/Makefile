@@ -7,7 +7,7 @@ GOBUILD=CGO_ENABLED=0 GOOS=linux $(GOCMD) build -a -installsuffix cgo -o $(GOOUT
 GODEV=$(GOCMD) build -o $(GOOUT) $(GODIR)
 GOCLEAN=$(GOCMD) clean
 GOLOCAL=$(GOCMD) run $(GODIR)/main.go
-GOTEST=$(GOCMD) test -v ./tests
+GOTEST=$(GOCMD) test -count=1 -v ./tests
 
 clean: 
 	$(GOCLEAN)

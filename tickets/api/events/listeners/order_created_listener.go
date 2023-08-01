@@ -26,7 +26,6 @@ func (t *OrderCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, err
 	err := json.Unmarshal(msg.Data(), &orderCreatedEvent)
 	if err != nil {
 		log.Default().Println("listener: Could not unmarshal data", err)
-		msg.Ack()
 		return nil, err
 	}
 	return orderCreatedEvent, nil
@@ -34,11 +33,6 @@ func (t *OrderCreatedListener) ParseMessage(msg jetstream.Msg) (interface{}, err
 
 func (t *OrderCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) error {
 	orderCreatedEvent, ok := data.(e.OrderCreatedEvent)
-
-	defer func() {
-		msg.Ack()
-	}()
-
 	if !ok {
 		log.Default().Println("listener: Could not cast data to OrderCreatedEvent")
 		return nil
@@ -49,12 +43,15 @@ func (t *OrderCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) er
 		log.Default().Println("listener: Could not get ticket from DB", err)
 		return err
 	}
+
 	ticket.OrderId = &orderCreatedEvent.Data.Id
 	err = ticket.Update(t.db)
 	if err != nil {
 		log.Default().Println("listener: Could not save ticket in DB", err)
 		return err
 	}
+
+	msg.Ack()
 
 	publisher := events.NewPublisher(t.Listener.Ns, events.TicketUpdated, context.TODO())
 	err = publisher.Publish(events.NewTicketUpdatedEvent(ticket.ID.Hex(), ticket.UserId, *ticket.OrderId, ticket.Title, ticket.Price, ticket.Version))
