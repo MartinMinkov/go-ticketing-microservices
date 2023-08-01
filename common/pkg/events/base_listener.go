@@ -96,6 +96,13 @@ func createStream(ctx context.Context, js jetstream.JetStream, subject string, q
 }
 
 func createConsumer(ctx context.Context, s jetstream.Stream, queueGroupName string, ackWait time.Duration) (jetstream.Consumer, error) {
+	log.Info().Msgf("creating consumer: %s", queueGroupName)
+	info, err := s.Info(ctx)
+	if err != nil {
+		log.Info().Msgf("s.Info error: %v", err)
+		return nil, err
+	}
+	log.Info().Msgf("info: %v", info)
 	cons, err := s.CreateOrUpdateConsumer(ctx, jetstream.ConsumerConfig{
 		Durable:       queueGroupName,
 		AckPolicy:     jetstream.AckExplicitPolicy,
