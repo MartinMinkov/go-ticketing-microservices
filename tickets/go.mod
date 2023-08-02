@@ -3,7 +3,7 @@ module github.com/MartinMinkov/go-ticketing-microservices/tickets
 go 1.20
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230802020411-2dc5411c9891
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230802212545-fdc5db386f28
 	github.com/gin-gonic/gin v1.9.1
 	github.com/nats-io/nats.go v1.28.0
 	github.com/rs/zerolog v1.29.1

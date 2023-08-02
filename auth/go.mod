@@ -3,7 +3,7 @@ module github.com/MartinMinkov/go-ticketing-microservices/auth
 go 1.20
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230726042821-13e792fa1b89
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230802212545-fdc5db386f28
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/rs/zerolog v1.29.1
