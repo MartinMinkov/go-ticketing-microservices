@@ -1,7 +1,8 @@
-github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230726050927-0a2e571eca7d/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
+github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230801233120-31e93c6e14c2/go.mod h1:CPvMHjgDSYpV9NfY4peUObR1yVV4o6y6pzowj9Im9iU=
 github.com/coreos/go-systemd/v22 v22.5.0 h1:RrqgGjYQKalulkV8NGVIfkXQf6YYmOyiJKk8iXXhfZs=
 github.com/go-playground/assert/v2 v2.2.0/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
 github.com/godbus/dbus/v5 v5.0.4 h1:9349emZab16e7zQvpmsbtjc18ykshndd8y2PG3sgJbA=
+github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/gofuzz v1.0.0 h1:A8PeW59pxE9IoFRqBp37U+mSNaQoZ46F1f0f863XSXw=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/rs/xid v1.4.0 h1:qd7wPTDkN6KQx2VmMBLrpHkiyQwgFXRnkOLacUiaSNY=

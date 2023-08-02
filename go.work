@@ -5,4 +5,5 @@ use (
 	./common
 	./tickets
 	./orders
+	./expiration
 )

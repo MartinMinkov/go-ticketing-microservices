@@ -59,3 +59,8 @@ services:
     ports:
       - "4222:4222"
       - "8222:8222"
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379

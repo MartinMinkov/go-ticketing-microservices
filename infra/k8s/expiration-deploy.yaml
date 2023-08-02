@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+      - name: expiration
+        image: mminkov/expiration
+        imagePullPolicy: Never
+        env:
+          - name: NATS_HOST
+            value: "nats-srv"
+          - name: NATS_PORT
+            value: "4222"
+          - name: ENVIRONMENT
+            value: "production"
+          - name: REDIS_HOST
+            value: expiration-redis-srv
+          - name: REDIS_PORT
+            value: "6379"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
