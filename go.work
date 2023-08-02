@@ -6,4 +6,5 @@ use (
 	./tickets
 	./orders
 	./expiration
+	./payments
 )

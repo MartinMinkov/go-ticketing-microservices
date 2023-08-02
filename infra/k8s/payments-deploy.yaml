@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      containers:
+      - name: payments
+        image: mminkov/payments
+        imagePullPolicy: Never
+        env:
+          - name: MONGO_HOST 
+            value: "payments-mongo-srv"
+          - name: MONGO_PORT
+            value: "27017"
+          - name: MONGO_DB_NAME
+            value: "payments"
+          - name: NATS_HOST
+            value: "nats-srv"
+          - name: NATS_PORT
+            value: "4222"
+          - name: ENVIRONMENT
+            value: "production"
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-srv
+spec:
+  selector:
+    app: payments
+  ports:
+    - name: payments
+      protocol: TCP
+      port: 8080
+      targetPort: 8080

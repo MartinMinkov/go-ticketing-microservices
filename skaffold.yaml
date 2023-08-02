@@ -42,6 +42,14 @@ build:
         manual:
           - src: 'expiration/**/*.go'
             dest: .
+    - image: mminkov/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'payments/**/*.go'
+            dest: .
     - image: mminkov/client
       context: client
       docker:
