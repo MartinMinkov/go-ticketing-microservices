@@ -9,6 +9,5 @@ const (
 	OrderCreated   Subjects = "order:created"
 	OrderCancelled Subjects = "order:cancelled"
 
-	ExpirationCreated  Subjects = "expiration:created"
 	ExpirationComplete Subjects = "expiration:complete"
 )
