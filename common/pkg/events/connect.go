@@ -9,7 +9,6 @@ import (
 
 func ConnectWithRetry(address string, retryInterval time.Duration, maxDuration time.Duration) (*nats.Conn, error) {
 	startTime := time.Now()
-
 	for {
 		elapsedTime := time.Since(startTime)
 		if elapsedTime > maxDuration {
