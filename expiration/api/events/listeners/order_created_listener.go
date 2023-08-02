@@ -37,6 +37,8 @@ func (t *OrderCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) er
 		return nil
 	}
 
+	log.Default().Println("listener: Received order created event in expiration service", orderCreatedEvent.Data.Id)
+
 	redis.EnqueueCreateExpiration(t.AsynqClient, orderCreatedEvent.Data.Id, time.Until(orderCreatedEvent.Data.ExpiresAt))
 	msg.Ack()
 	return nil

@@ -56,6 +56,13 @@ func InitEventListeners(appState *state.AppState) {
 			fmt.Println(err.Error())
 		}
 	}()
+	go func() {
+		expirationCompleteListener := listeners.NewExpirationCompleteListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		if err := expirationCompleteListener.Listener.Listen(); err != nil {
+			log.Err(err).Msg("Failed to start expiration complete listener")
+			fmt.Println(err.Error())
+		}
+	}()
 }
 
 func InitLogger() {

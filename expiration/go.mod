@@ -3,7 +3,7 @@ module github.com/MartinMinkov/go-ticketing-microservices/expiration
 go 1.20
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230801233726-6e5566d050a9
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230802020411-2dc5411c9891
 	github.com/hibiken/asynq v0.24.1
 	github.com/nats-io/nats.go v1.28.0
 	github.com/rs/zerolog v1.29.1

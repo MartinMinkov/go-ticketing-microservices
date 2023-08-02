@@ -101,3 +101,17 @@ func (t *Ticket) Delete(db *database.Database) error {
 	}
 	return nil
 }
+
+func IsTicketReserved(db *database.Database, ticketId string) (bool, error) {
+	var order Order
+	filter := bson.M{"$in": bson.A{string(OrderCreated), string(OrderAwaitingPayment), string(OrderComplete)}}
+	err := db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "ticket_id", Value: ticketId}, {Key: "status", Value: filter}}).Decode(&order)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return false, nil
+		}
+		return false, errors.New("failed to get order: " + err.Error())
+	}
+	return true, nil
+}

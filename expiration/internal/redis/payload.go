@@ -31,12 +31,3 @@ func EnqueueCreateExpiration(client *asynq.Client, orderId string, duration time
 	task := CreateExpirationTask(orderId)
 	return EnqueueTask(client, task, duration)
 }
-
-func ParsePayload(payload []byte) (string, error) {
-	var p Payload
-	err := json.Unmarshal(payload, &p)
-	if err != nil {
-		return "", err
-	}
-	return p.OrderId, nil
-}

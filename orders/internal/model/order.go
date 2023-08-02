@@ -21,7 +21,7 @@ const (
 	OrderComplete        Status = "complete"
 )
 
-const DefaultDuration = time.Minute * 2
+const DefaultDuration = time.Second * 15
 
 type Order struct {
 	ID        primitive.ObjectID `bson:"_id" json:"id"`
@@ -68,13 +68,13 @@ func GetAllOrders(db *database.Database, userId string) ([]*Order, error) {
 	return orders, nil
 }
 
-func GetSingleOrder(db *database.Database, id string, userId string) (*Order, error) {
+func GetSingleOrder(db *database.Database, id string) (*Order, error) {
 	var order Order
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, errors.New("failed to order ticket ID to ObjectID: " + err.Error())
 	}
-	err = db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "_id", Value: objectId}, {Key: "user_id", Value: userId}}).Decode(&order)
+	err = db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "_id", Value: objectId}}).Decode(&order)
 	if err != nil {
 		return nil, errors.New("failed to get order: " + err.Error())
 	}
@@ -147,18 +147,4 @@ func GetOrderByTicketId(db *database.Database, ticketId string) (*Order, error) 
 		return nil, errors.New("failed to get order: " + err.Error())
 	}
 	return &order, nil
-}
-
-func IsTicketReserved(db *database.Database, ticketId string) (bool, error) {
-	var order Order
-	filter := bson.M{"$in": bson.A{string(OrderCreated), string(OrderAwaitingPayment), string(OrderComplete)}}
-	err := db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "ticket_id", Value: ticketId}, {Key: "status", Value: filter}}).Decode(&order)
-
-	if err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return false, nil
-		}
-		return false, errors.New("failed to get order: " + err.Error())
-	}
-	return true, nil
 }
