@@ -20,6 +20,7 @@ func main() {
 		appState.NatsCleanup()
 	}()
 
+	api.InitEventListeners(appState)
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Printf("listen: %s\n", err)

@@ -21,7 +21,7 @@ func DeleteOrder(c *gin.Context, appState *state.AppState) {
 	}
 
 	publisher := events.NewPublisher(appState.NatsConn, events.OrderCancelled, context.TODO())
-	err = publisher.Publish(events.NewOrderCancelledEvent(orderId, *cancelledOrder.TicketId))
+	err = publisher.Publish(events.NewOrderCancelledEvent(orderId, *cancelledOrder.TicketId, *cancelledOrder.Version))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish order cancelled event")
 	}

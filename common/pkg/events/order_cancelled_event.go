@@ -5,8 +5,9 @@ type OrderCancelledEventTicketData struct {
 }
 
 type OrderCancelledEventData struct {
-	Id     string `json:"id"`
-	Ticket OrderCancelledEventTicketData
+	Id      string `json:"id"`
+	Version int64  `json:"version"`
+	Ticket  OrderCancelledEventTicketData
 }
 
 type OrderCancelledEvent struct {
@@ -14,11 +15,12 @@ type OrderCancelledEvent struct {
 	Data    OrderCancelledEventData `json:"data"`
 }
 
-func NewOrderCancelledEvent(id string, ticketId string) *OrderCancelledEvent {
+func NewOrderCancelledEvent(id string, ticketId string, version int64) *OrderCancelledEvent {
 	return &OrderCancelledEvent{
 		Subject: OrderCancelled,
 		Data: OrderCancelledEventData{
-			Id: id,
+			Id:      id,
+			Version: version,
 			Ticket: OrderCancelledEventTicketData{
 				Id: ticketId,
 			},

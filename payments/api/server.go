@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/auth"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
+	"github.com/MartinMinkov/go-ticketing-microservices/payments/api/events/listeners"
 	"github.com/MartinMinkov/go-ticketing-microservices/payments/api/routes"
 	"github.com/MartinMinkov/go-ticketing-microservices/payments/internal/config"
 	"github.com/MartinMinkov/go-ticketing-microservices/payments/internal/database"
@@ -40,6 +42,17 @@ func BuildServer(cfg *config.Config, appState *state.AppState) *http.Server {
 func InitLogger() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+}
+
+func InitEventListeners(appState *state.AppState) {
+	go func() {
+		orderCreatedListener := listeners.NewOrderCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		orderCreatedListener.Listener.Listen()
+	}()
+	go func() {
+		orderCancelledListener := listeners.NewOrderCancelledListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		orderCancelledListener.Listener.Listen()
+	}()
 }
 
 func BuildAppState(config *config.Config) *state.AppState {

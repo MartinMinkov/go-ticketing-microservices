@@ -11,10 +11,10 @@ import (
 )
 
 type Database struct {
-	Client           *mongo.Client
-	TicketCollection *mongo.Collection
-	Ctx              context.Context
-	CancelFunc       context.CancelFunc
+	Client          *mongo.Client
+	OrderCollection *mongo.Collection
+	Ctx             context.Context
+	CancelFunc      context.CancelFunc
 }
 
 func ConnectDB(config *config.Config) *Database {
@@ -38,6 +38,6 @@ func ConnectDB(config *config.Config) *Database {
 		log.Fatal(err)
 	}
 
-	ticketCollection := client.Database(config.DatabaseConfig.Database).Collection("tickets")
-	return &Database{Client: client, TicketCollection: ticketCollection, Ctx: context.TODO()}
+	orderCollection := client.Database(config.DatabaseConfig.Database).Collection("orders")
+	return &Database{Client: client, OrderCollection: orderCollection, Ctx: context.TODO()}
 }

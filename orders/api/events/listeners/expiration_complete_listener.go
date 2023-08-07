@@ -52,7 +52,7 @@ func (t *ExpirationCompleteListener) OnMessage(data interface{}, msg jetstream.M
 	}
 
 	publisher := events.NewPublisher(t.Listener.Ns, events.OrderCancelled, context.TODO())
-	err = publisher.Publish(events.NewOrderCancelledEvent(orderId, *order.TicketId))
+	err = publisher.Publish(events.NewOrderCancelledEvent(orderId, *order.TicketId, *order.Version))
 	if err != nil {
 		log.Default().Println("listener: Could not publish order cancelled event", err)
 	}

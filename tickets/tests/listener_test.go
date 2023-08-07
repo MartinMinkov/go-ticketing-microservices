@@ -95,7 +95,7 @@ func TestOrderUpdatesListenerUnReservesTicket(t *testing.T) {
 	}
 
 	publisher = events.NewPublisher(app.AppState.NatsConn, events.OrderCancelled, context.TODO())
-	err = publisher.Publish(events.NewOrderCancelledEvent(*reserved_ticket.OrderId, ticket.ID.Hex()))
+	err = publisher.Publish(events.NewOrderCancelledEvent(*reserved_ticket.OrderId, ticket.ID.Hex(), 0))
 	if err != nil {
 		log.Err(err).Msg("Failed to publish order cancelled event")
 	}
