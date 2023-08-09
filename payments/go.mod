@@ -3,7 +3,7 @@ module github.com/MartinMinkov/go-ticketing-microservices/payments
 go 1.20
 
 require (
-	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230802212545-fdc5db386f28
+	github.com/MartinMinkov/go-ticketing-microservices/common v0.0.0-20230807223125-80b19a8146d2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/nats-io/nats.go v1.28.0
 	github.com/rs/zerolog v1.29.1
@@ -35,6 +35,7 @@ require (
 	github.com/nats-io/nkeys v0.4.4 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
+	github.com/stripe/stripe-go/v74 v74.29.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect

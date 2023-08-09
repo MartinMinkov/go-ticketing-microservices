@@ -20,8 +20,9 @@ type Order struct {
 }
 
 func NewOrder(id string, userId string, status string, price int64, version int64) *Order {
+	objectId, _ := primitive.ObjectIDFromHex(id)
 	return &Order{
-		ID:      primitive.NewObjectID(),
+		ID:      objectId,
 		UserId:  &userId,
 		Status:  &status,
 		Version: &version,

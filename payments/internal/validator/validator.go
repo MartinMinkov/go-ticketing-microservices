@@ -5,30 +5,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type TicketInput interface {
-	Title() string
-	Price() int64
+type OrderInput interface {
+	ID() string
+	Token() string
 }
 
-func ValidateTicket(c *gin.Context, input TicketInput) error {
+func ValidatePayment(c *gin.Context, input OrderInput) error {
 	validateFields := map[string]string{
 		"ID":    "ID validation error",
-		"Title": "Title validation error",
-		"Price": "Price validation error",
-	}
-	errMessages, err := v.ValidateInput(input, validateFields)
-	if err != nil {
-		errors := v.ErrorResponse{Errors: errMessages}
-		errors.Error(c)
-	}
-	return err
-}
-
-func ValidateUpdateTicket(c *gin.Context, input TicketInput) error {
-	validateFields := map[string]string{
-		"ID":    "ID validation error",
-		"Title": "Title validation error",
-		"Price": "Price validation error",
+		"Token": "Token validation error",
 	}
 	errMessages, err := v.ValidateInput(input, validateFields)
 	if err != nil {

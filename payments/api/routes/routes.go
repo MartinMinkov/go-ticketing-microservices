@@ -17,6 +17,9 @@ func Routes(appState *state.AppState) func(router *gin.Engine) {
 			authorized.Use(middleware.JWTMiddleware())
 			authorized.Use(middleware.UserMiddleware())
 
+			authorized.POST("/", func(c *gin.Context) {
+				CreatePayment(c, appState)
+			})
 		}
 	}
 }

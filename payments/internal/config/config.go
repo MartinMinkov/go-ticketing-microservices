@@ -147,3 +147,11 @@ func GetJWTSecret() (string, error) {
 	}
 	return secret, nil
 }
+
+func GetStripeSecret() (string, error) {
+	secret := os.Getenv("STRIPE_KEY")
+	if secret == "" {
+		return "", nil
+	}
+	return secret, nil
+}

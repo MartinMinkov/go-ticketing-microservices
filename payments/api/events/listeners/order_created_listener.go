@@ -13,7 +13,7 @@ import (
 	"github.com/nats-io/nats.go/jetstream"
 )
 
-const QueueGroupName = "tickets-service"
+const QueueGroupName = "payments-service"
 
 type OrderCreatedListener struct {
 	Listener *e.Listener
@@ -38,7 +38,7 @@ func (t *OrderCreatedListener) OnMessage(data interface{}, msg jetstream.Msg) er
 	}
 
 	order := model.NewOrder(orderCreatedEvent.Data.Id, orderCreatedEvent.Data.UserId, orderCreatedEvent.Data.Status, orderCreatedEvent.Data.Ticket.Price, orderCreatedEvent.Data.Version)
-	err := order.Update(t.db)
+	err := order.Save(t.db)
 	if err != nil {
 		log.Default().Println("listener: Could not save order in DB", err)
 		return err

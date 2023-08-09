@@ -25,7 +25,7 @@ services:
       - 27018:27017
     volumes:
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
-  orders_tickets:
+  mongo_orders:
     image: mongo:latest
     restart: always
     environment:
@@ -35,6 +35,18 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo_orders
     ports:
       - 27019:27017
+    volumes:
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+  mongo_payments:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: payments
+      ME_CONFIG_MONGODB_SERVER: mongo_payments
+    ports:
+      - 27020:27017
     volumes:
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
   nats:
