@@ -10,4 +10,6 @@ const (
 	OrderCancelled Subjects = "order:cancelled"
 
 	ExpirationComplete Subjects = "expiration:complete"
+
+	PaymentCreated Subjects = "payment:created"
 )
