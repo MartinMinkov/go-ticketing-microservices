@@ -21,7 +21,7 @@ const (
 	OrderComplete        Status = "complete"
 )
 
-const DefaultDuration = time.Second * 15
+const DefaultDuration = time.Second * 60
 
 type Order struct {
 	ID        primitive.ObjectID `bson:"_id" json:"id"`
