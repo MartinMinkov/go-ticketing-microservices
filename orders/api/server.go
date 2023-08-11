@@ -63,6 +63,13 @@ func InitEventListeners(appState *state.AppState) {
 			fmt.Println(err.Error())
 		}
 	}()
+	go func() {
+		paymentCreatedListener := listeners.NewPaymentCreatedListener(appState.NatsConn, time.Second*5, appState.DB, context.TODO())
+		if err := paymentCreatedListener.Listener.Listen(); err != nil {
+			log.Err(err).Msg("Failed to start payment created listener")
+			fmt.Println(err.Error())
+		}
+	}()
 }
 
 func InitLogger() {

@@ -41,18 +41,11 @@ func (t *OrderCancelledListener) OnMessage(data interface{}, msg jetstream.Msg) 
 		return err
 	}
 
-	order, err = model.CancelOrder(t.db, order.ID.Hex())
+	_, err = model.CancelOrder(t.db, order.ID.Hex())
 	if err != nil {
 		log.Default().Println("listener: Could not cancel order", err)
 		return err
 	}
-
-	// publisher := events.NewPublisher(t.Listener.Ns, events.TicketUpdated, context.TODO())
-	// err = publisher.Publish(events.NewTicketUpdatedEvent(order.ID.Hex(), order.UserId, *order.OrderId, order.Title, order.Price, order.Version))
-	// if err != nil {
-	// 	log.Default().Println("listener: Could not publish ticket updated event", err)
-	// 	return err
-	// }
 
 	msg.Ack()
 	return nil

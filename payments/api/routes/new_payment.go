@@ -1,8 +1,11 @@
 package routes
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 
+	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/events"
 	"github.com/MartinMinkov/go-ticketing-microservices/common/pkg/middleware"
 	"github.com/MartinMinkov/go-ticketing-microservices/payments/internal/model"
 	"github.com/MartinMinkov/go-ticketing-microservices/payments/internal/state"
@@ -54,7 +57,7 @@ func CreatePayment(c *gin.Context, appState *state.AppState) {
 	params := &stripe.ChargeParams{
 		Amount:      stripe.Int64(*existingOrder.Price * 100),
 		Currency:    stripe.String(string(stripe.CurrencyCAD)),
-		Description: stripe.String("My First Test Charge (created for API docs at https://www.stripe.com/docs/api)"),
+		Description: stripe.String(fmt.Sprintf("OrderID: %s", input.ID())),
 		Source:      &stripe.PaymentSourceSourceParams{Token: stripe.String(input.Token())},
 	}
 
@@ -65,7 +68,21 @@ func CreatePayment(c *gin.Context, appState *state.AppState) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	payment := model.NewPayment(existingOrder.ID.Hex(), input.Token())
+	err = payment.Save(appState.DB)
+	if err != nil {
+		log.Err(err).Msg("Failed to save payment")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save payment"})
+		return
+	}
+
+	publisher := events.NewPublisher(appState.NatsConn, events.PaymentCreated, context.TODO())
+	err = publisher.Publish(events.NewPaymentCreatedEvent(payment.ID.Hex(), payment.OrderId, payment.StripeId))
+	if err != nil {
+		log.Err(err).Msg("Failed to publish order created event")
+	}
+
+	c.JSON(http.StatusOK, gin.H{"id": payment.ID.Hex()})
 }
 
 type createPaymentInput struct {

@@ -140,6 +140,32 @@ func CancelOrder(db *database.Database, id string) (*Order, error) {
 	return &updatedOrder, nil
 }
 
+func CompleteOrder(db *database.Database, id string) (*Order, error) {
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, errors.New("failed to order ticket ID to ObjectID: " + err.Error())
+	}
+	filter := bson.M{"_id": objectId}
+	update := bson.M{
+		"$set": bson.M{
+			"status": OrderComplete,
+		},
+	}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedOrder Order
+	err = db.OrderCollection.FindOneAndUpdate(context.Background(), filter, update, opts).Decode(&updatedOrder)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, errors.New("order not found")
+		}
+		return nil, errors.New("failed to update order: " + err.Error())
+	}
+
+	return &updatedOrder, nil
+}
+
 func GetOrderByTicketId(db *database.Database, ticketId string) (*Order, error) {
 	var order Order
 	err := db.OrderCollection.FindOne(db.Ctx, bson.D{{Key: "ticket_id", Value: ticketId}}).Decode(&order)
